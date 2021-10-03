@@ -17,7 +17,7 @@ public class UsersController {
     private UserManager um;
 
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserPath(@PathVariable(value = "id") int id) {
+    public ResponseEntity<User> getUserPath(@PathVariable(value = "id") Long id) {
         User user = um.getUser(id);
         return ResponseEntity.ok().body(user);
 

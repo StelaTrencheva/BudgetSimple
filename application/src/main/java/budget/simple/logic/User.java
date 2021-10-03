@@ -1,25 +1,106 @@
 package budget.simple.logic;
 
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.Objects;
 import java.lang.String;
 
+import static javax.persistence.GenerationType.SEQUENCE;
 
+@Entity(name = "User")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "email",
+                        columnNames = "email"
+                ),
+                @UniqueConstraint(
+                        name = "username",
+                        columnNames = "username"
+                        )
+
+        })
 public class User {
-    @Getter @Setter private int id;
+    @Id
+    @SequenceGenerator
+            (
+                    name="user_sequence",
+                    sequenceName = "user_sequence",
+                    allocationSize = 1
+            )
+    @GeneratedValue
+            (
+                    strategy = SEQUENCE,
+                    generator = "user_sequence"
+
+            )
+    @Column
+            (
+                    name = "id",
+                    updatable = false
+            )
+    @Getter @Setter private Long id;
+    @Column
+            (
+                    name = "first_name",
+                    nullable = false
+            )
     @Getter @Setter private String firstName;
+    @Column
+            (
+                    name = "last_name",
+                    nullable = false,
+                    columnDefinition = "TEXT"
+            )
     @Getter @Setter private String lastName;
+    @Column
+            (
+                    name = "email",
+                    nullable = false,
+                    columnDefinition = "varchar(255)"
+            )
     @Getter @Setter private String email;
+    @Column
+            (
+                    name = "address",
+                    nullable = false,
+                    columnDefinition = "TEXT"
+            )
     @Getter @Setter private String address;
+    @Column
+            (
+                    name = "phone_number",
+                    nullable = false,
+                    columnDefinition = "TEXT"
+            )
     @Getter @Setter private String phoneNum;
+    @Column
+            (
+                    name = "username",
+                    nullable = false,
+                    columnDefinition = "varchar(255)"
+            )
     @Getter @Setter private String username;
+    @Column
+            (
+                    name = "position",
+                    nullable = false,
+                    columnDefinition = "enum('USER', 'ADMIN', 'CUSTOMER_SUPPORT')"
+            )
+    @Enumerated(EnumType.STRING)
+    @Getter @Setter private Position position;
+    @Column
+            (
+                    name = "password",
+                    nullable = false,
+                    columnDefinition = "TEXT"
+            )
     @Getter @Setter private String password;
 
-    public User(int id,String firstName, String lastName, String email, String phoneNum, String username, String password) {
+    public User(Long id,String firstName, String lastName, String email, String phoneNum, String username, String password,Position position) {
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -28,6 +109,11 @@ public class User {
         this.username = username;
         this.password = password;
         this.id=id;
+        this.position=position;
+    }
+
+    public User() {
+
     }
 
     @Override
@@ -51,6 +137,7 @@ public class User {
                 ", address='" + this.address+ '\'' +
                 ", phone number='" + this.phoneNum+ '\'' +
                 ", username='" + this.username+
+                ", position='" + this.position+
                 '}';
     }
 

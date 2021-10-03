@@ -2,6 +2,7 @@ package budget.simple;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import budget.simple.logic.Position;
 import budget.simple.logic.User;
 import budget.simple.logic.UserManager;
 import budget.simple.repository.IUsersData;
@@ -19,8 +20,8 @@ public class UserManagerTest {
     {
 
         // arrange
-        int userId = 1;
-        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0");
+        Long userId = 1L;
+        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0",Position.USER);
 
         IUsersData usersData = mock(IUsersData.class);
         when(usersData.getUser(userId)).thenReturn(user);
@@ -36,13 +37,13 @@ public class UserManagerTest {
     @Test
     public void getAllUsersTest(){
         //arrange
-        int idSeeker=1;
+        Long idSeeker=1L;
         List<User> usersList = new ArrayList<>();
-        usersList.add(new User(idSeeker++,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0"));
-        usersList.add(new User(idSeeker++,"Test1", "Test1","Test1@gmail.com","0123456789","Test1","Test1"));
-        usersList.add(new User(idSeeker++,"Test2", "Test2","Test2@gmail.com","0123456789","Test2","Test2"));
-        usersList.add(new User(idSeeker++,"Test3", "Test3","Test3@gmail.com","0123456789","Test3","Test3"));
-        usersList.add(new User(idSeeker++,"Test4", "Test4","Test4@gmail.com","0123456789","Test4","Test4"));
+        usersList.add(new User(idSeeker++,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0",Position.USER));
+        usersList.add(new User(idSeeker++,"Test1", "Test1","Test1@gmail.com","0123456789","Test1","Test1",Position.USER));
+        usersList.add(new User(idSeeker++,"Test2", "Test2","Test2@gmail.com","0123456789","Test2","Test2",Position.USER));
+        usersList.add(new User(idSeeker++,"Test3", "Test3","Test3@gmail.com","0123456789","Test3","Test3",Position.USER));
+        usersList.add(new User(idSeeker++,"Test4", "Test4","Test4@gmail.com","0123456789","Test4","Test4",Position.USER));
 
         IUsersData usersData = mock(IUsersData.class);
         when(usersData.getUsers()).thenReturn(usersList);
@@ -59,8 +60,8 @@ public class UserManagerTest {
     @Test
     public void addUserTest(){
         //arrange
-        int userId = 1;
-        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0");
+        Long userId=1L;
+        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0", Position.USER);
         IUsersData usersData = mock(IUsersData.class);
         doNothing().when(usersData).addUser(user);
         UserManager userManager = new UserManager(usersData);
@@ -72,9 +73,9 @@ public class UserManagerTest {
     @Test
     public void updateUserInfoTest(){
         //arrange
-        int userId = 1;
-        User oldUser = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0");
-        User user = new User(userId,"Test5", "Test5","Test5@gmail.com","0123456789","Test5","Test5");
+        Long userId=1L;
+        User oldUser = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0",Position.USER);
+        User user = new User(userId,"Test5", "Test5","Test5@gmail.com","0123456789","Test5","Test5",Position.USER);
         IUsersData usersData=mock(IUsersData.class);
         when(usersData.getUser(userId)).thenReturn(oldUser);
         doNothing().when(usersData).saveUser(user);
@@ -88,15 +89,15 @@ public class UserManagerTest {
     @Test
     public void getUserIdTest(){
         // arrange
-        int userId = 1;
-        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0");
+        Long userId=1L;
+        User user = new User(userId,"Test0", "Test0","Test0@gmail.com","0123456789","Test0","Test0",Position.USER);
 
         IUsersData usersData = mock(IUsersData.class);
-        when(usersData.getUserId(user.getUsername())).thenReturn(1);
+        when(usersData.getUserId(user.getUsername())).thenReturn(1L);
         UserManager userManager = new UserManager(usersData);
 
         // act
-        int id = userManager.getUserId(user.getUsername());
+        Long id = userManager.getUserId(user.getUsername());
 
         // assert
         assertEquals(id, 1);

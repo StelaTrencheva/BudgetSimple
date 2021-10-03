@@ -8,7 +8,7 @@ public interface IUsersData {
     List<User> getUsers();
     void addUser(User user);
     void saveUser(User user);
-    User getUser(int id);
-    int getUserId(String username);
+    User getUser(Long id);
+    Long getUserId(String username);
 
 }

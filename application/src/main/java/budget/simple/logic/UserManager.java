@@ -17,7 +17,7 @@ public class UserManager {
         this.usersData = usersData;
     }
 
-    public User getUser(int id){
+    public User getUser(Long id){
         User user=usersData.getUser(id);
         if(user==null){
             throw new NotExistingUserException();
@@ -44,7 +44,7 @@ public class UserManager {
         }
         usersData.saveUser(user);
     }
-    public int getUserId(String username){
+    public Long getUserId(String username){
         return usersData.getUserId(username);
     }
 }
