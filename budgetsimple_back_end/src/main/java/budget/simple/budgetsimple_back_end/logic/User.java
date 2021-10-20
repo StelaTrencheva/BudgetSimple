@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-import java.lang.String;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -111,17 +110,18 @@ public class User {
             )
     @Getter @Setter private Date dateOfBirth;
 
-    public User(Long id,String firstName, String lastName, String email, String phoneNum, String username, String password, Position position, Date dateOfBirth) {
+    public User(Long id,UserPersonalInfo personalInfo, UserContact userContact, Position position, UserCredentials userCredentials) {
 
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNum = phoneNum;
-        this.username = username;
-        this.password = password;
+        this.firstName = personalInfo.getFirstName();
+        this.lastName = personalInfo.getLastName();
+        this.email = userContact.getEmail();
+        this.phoneNum = userContact.getPhoneNum();
+        this.address = userContact.getAddress();
+        this.username = userCredentials.getUsername();
+        this.password = userCredentials.getPassword();
         this.id=id;
         this.position = position;
-        this.dateOfBirth=dateOfBirth;
+        this.dateOfBirth=personalInfo.getDateOfBirth();
     }
 
     public User() {

@@ -1,5 +1,7 @@
 package budget.simple.budgetsimple_back_end.logic;
 
+import budget.simple.budgetsimple_back_end.controller.dto.UserDTO;
+import budget.simple.budgetsimple_back_end.logic.mappers.UserMapper;
 import org.springframework.stereotype.Service;
 import budget.simple.budgetsimple_back_end.repository.IUsersData;
 import budget.simple.budgetsimple_back_end.exceptions.*;
@@ -28,18 +30,20 @@ public class UserManager {
         }
         return users;
     }
-    public void addUser(User user){
-        if (usersData.getUserId(user.getUsername()) != null){
+    public void addUser(UserDTO userDTO){
+        if (usersData.getUserId(userDTO.getUsername()) != null){
             throw new ExistingUserException();
         }
-        usersData.addUser(user);
+        UserMapper newUser = new UserMapper(userDTO);
+        usersData.addUser(newUser.getUser());
     }
-    public void updateUserInfo(User user) {
-        User old = usersData.getUser(user.getId());
+    public void updateUserInfo(UserDTO userDTO) {
+        User old = usersData.getUser(userDTO.getId());
         if (old == null) {
             throw new NotExistingUserException();
         }
-        usersData.updateUserInfo(user);
+        UserMapper newUser = new UserMapper(userDTO);
+        usersData.updateUserInfo(newUser.getUser());
     }
     public User loginUser(String username,String password) {
         User foundUser = usersData.getUserByUsernameAndPassword(username,password);
