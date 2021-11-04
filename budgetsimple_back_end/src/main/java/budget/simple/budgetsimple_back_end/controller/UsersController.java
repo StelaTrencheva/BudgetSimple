@@ -1,8 +1,8 @@
 package budget.simple.budgetsimple_back_end.controller;
 
 
-import budget.simple.budgetsimple_back_end.controller.dto.LoginDTO;
-import budget.simple.budgetsimple_back_end.controller.dto.UserDTO;
+import budget.simple.budgetsimple_back_end.model.LoginDTO;
+import budget.simple.budgetsimple_back_end.model.UserDTO;
 import budget.simple.budgetsimple_back_end.logic.User;
 import budget.simple.budgetsimple_back_end.logic.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
+@CrossOrigin(origins = "http://localhost:3000",exposedHeaders = "Authorization")
 @RequestMapping("/user")
 public class UsersController {
     @Autowired
@@ -37,15 +39,22 @@ public class UsersController {
 
     @PostMapping("/createUser")
     @ResponseStatus(HttpStatus.CREATED)
-    public Long createUser(@RequestBody UserDTO user) {
+    public User createUser(@RequestBody UserDTO user) {
         um.addUser(user);
-        return um.getUserId(user.getUsername());
+        return um.getUser(user.getUsername());
     }
 
+
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.CREATED)
     public User loginUser(@RequestBody LoginDTO loginDTO) {
         return um.loginUser(loginDTO.getUsername(),loginDTO.getPassword());
+    }
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public User getLoggedInUser() {
+        return um.getLoggedInUser();
     }
 
     @PutMapping("/updateUser")

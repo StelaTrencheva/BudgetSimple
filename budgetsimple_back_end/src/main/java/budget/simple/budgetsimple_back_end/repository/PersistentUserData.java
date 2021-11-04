@@ -37,8 +37,8 @@ public class PersistentUserData implements IUsersData{
     }
 
     @Override
-    public Long getUserId(String username) {
-        return data.findUserIdByUsername(username);
+    public User getUser(String username) {
+        return data.findUserByUsername(username);
     }
 
     @Override

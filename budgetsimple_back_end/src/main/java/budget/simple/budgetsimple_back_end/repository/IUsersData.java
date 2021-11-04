@@ -9,7 +9,7 @@ public interface IUsersData {
     void addUser(User user);
     void saveUser(User user);
     User getUser(Long id);
-    Long getUserId(String username);
+    User getUser(String username);
     User getUserByUsernameAndPassword(String username, String password);
     void updateUserInfo(User user);
 

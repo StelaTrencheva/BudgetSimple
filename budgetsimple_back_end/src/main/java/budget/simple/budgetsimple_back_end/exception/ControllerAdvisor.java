@@ -1,4 +1,4 @@
-package budget.simple.budgetsimple_back_end.exceptions;
+package budget.simple.budgetsimple_back_end.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

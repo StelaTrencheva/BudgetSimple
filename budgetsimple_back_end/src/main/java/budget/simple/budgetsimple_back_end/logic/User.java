@@ -1,5 +1,9 @@
 package budget.simple.budgetsimple_back_end.logic;
 
+import budget.simple.budgetsimple_back_end.model.UserContact;
+import budget.simple.budgetsimple_back_end.model.UserCredentials;
+import budget.simple.budgetsimple_back_end.model.UserPersonalInfo;
+import budget.simple.budgetsimple_back_end.model.UserWorkingInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -86,12 +90,12 @@ public class User {
     @Getter @Setter private String username;
     @Column
             (
-                    name = "position",
+                    name = "role",
                     nullable = false,
                     columnDefinition = "enum('USER', 'ADMIN', 'CUSTOMER_SUPPORT')"
             )
     @Enumerated(EnumType.STRING)
-    @Getter @Setter private Position position;
+    @Getter @Setter private Role role;
     @Column
             (
                     name = "password",
@@ -110,7 +114,37 @@ public class User {
             )
     @Getter @Setter private Date dateOfBirth;
 
-    public User(Long id,UserPersonalInfo personalInfo, UserContact userContact, Position position, UserCredentials userCredentials) {
+
+    @Column
+            (
+                    name = "emergency_phone_number",
+                    columnDefinition = "TEXT"
+            )
+
+    @Getter @Setter private String emergencyPhoneNum;
+    @Column
+            (
+                    name = "bank_account",
+                    columnDefinition = "TEXT"
+            )
+
+    @Getter @Setter private String bankAccount;
+    @Column
+            (
+                    name = "hourly_wage",
+                    columnDefinition = "DOUBLE"
+            )
+    @Getter @Setter private Double hourlyWage;
+
+    @Temporal(TemporalType.DATE)
+    @Column
+            (
+                    name = "first_working_day",
+                    columnDefinition = "date"
+            )
+    @Getter @Setter private Date firstWorkingDay;
+
+    public User(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials) {
 
         this.firstName = personalInfo.getFirstName();
         this.lastName = personalInfo.getLastName();
@@ -120,10 +154,17 @@ public class User {
         this.username = userCredentials.getUsername();
         this.password = userCredentials.getPassword();
         this.id=id;
-        this.position = position;
+        this.role = role;
         this.dateOfBirth=personalInfo.getDateOfBirth();
     }
+    public User(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials, UserWorkingInfo userWorkingInfo) {
 
+        this(id,personalInfo,userContact, role,userCredentials);
+        this.bankAccount=userWorkingInfo.getBankAccount();
+        this.emergencyPhoneNum=userWorkingInfo.getEmergencyPhoneNum();
+        this.firstWorkingDay=userWorkingInfo.getFirstWorkingDay();
+        this.hourlyWage=userWorkingInfo.getHourlyWage();
+    }
     public User() {
 
     }
@@ -149,7 +190,7 @@ public class User {
                 ", address='" + this.address+ '\'' +
                 ", phone number='" + this.phoneNum+ '\'' +
                 ", username='" + this.username+
-                ", position='" + this.position +
+                ", position='" + this.role +
                 '}';
     }
 

@@ -1,4 +1,4 @@
-package budget.simple.budgetsimple_back_end.exceptions;
+package budget.simple.budgetsimple_back_end.exception;
 
 public class NoUsersFoundException extends RuntimeException{
     public NoUsersFoundException(){

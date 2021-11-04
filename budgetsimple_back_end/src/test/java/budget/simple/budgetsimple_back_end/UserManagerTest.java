@@ -1,18 +1,8 @@
 package budget.simple.budgetsimple_back_end;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
-import budget.simple.budgetsimple_back_end.logic.Position;
-import budget.simple.budgetsimple_back_end.logic.User;
-import budget.simple.budgetsimple_back_end.logic.UserManager;
-import budget.simple.budgetsimple_back_end.repository.IUsersData;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class UserManagerTest {

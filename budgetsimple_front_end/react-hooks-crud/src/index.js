@@ -12,7 +12,7 @@ ReactDOM.render(
         <Switch>
             <Route exact path="/sign-in" component={Login} />
             <Route exact path="/sign-up" component={SignUp} />
-            <Route exact path="/user/account/:id" component={Account} />
+            <Route exact path="/user/account" component={Account} />
             <Route path="*">
                 <Redirect to="/sign-in" />
             </Route>

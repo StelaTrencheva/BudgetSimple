@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 
 public interface IPersistentUserData extends JpaRepository<User, Long> {
-    @Query("SELECT u.id FROM User u WHERE u.username = :username")
-    Long findUserIdByUsername(@Param("username") String username);
+    @Query("SELECT u FROM User u WHERE u.username = :username")
+    User findUserByUsername(@Param("username") String username);
 
     @Query("SELECT u FROM User u WHERE u.username = :username and u.password = :password")
     User getUserByUsernameAndPassword(@Param("username") String username, @Param("password") String password);

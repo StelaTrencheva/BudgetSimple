@@ -1,19 +1,22 @@
 package budget.simple.budgetsimple_back_end.logic;
 
-import budget.simple.budgetsimple_back_end.controller.dto.UserDTO;
-import budget.simple.budgetsimple_back_end.logic.mappers.UserMapper;
+import budget.simple.budgetsimple_back_end.model.UserDTO;
+import budget.simple.budgetsimple_back_end.logic.mapper.UserMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import budget.simple.budgetsimple_back_end.repository.IUsersData;
-import budget.simple.budgetsimple_back_end.exceptions.*;
+import budget.simple.budgetsimple_back_end.exception.*;
 import java.util.List;
 // tests with mocking
 
 @Service
 public class UserManager {
     private final IUsersData usersData;
+    private final UserMapper userMapper;
 
-    public UserManager(IUsersData usersData) {
+    public UserManager(IUsersData usersData, UserMapper userMapper) {
         this.usersData = usersData;
+        this.userMapper = userMapper;
     }
 
     public User getUser(Long id){
@@ -31,19 +34,17 @@ public class UserManager {
         return users;
     }
     public void addUser(UserDTO userDTO){
-        if (usersData.getUserId(userDTO.getUsername()) != null){
+        if (usersData.getUser(userDTO.getUsername()) != null){
             throw new ExistingUserException();
         }
-        UserMapper newUser = new UserMapper(userDTO);
-        usersData.addUser(newUser.getUser());
+        usersData.addUser(userMapper.mapToModel(userDTO));
     }
     public void updateUserInfo(UserDTO userDTO) {
         User old = usersData.getUser(userDTO.getId());
         if (old == null) {
             throw new NotExistingUserException();
         }
-        UserMapper newUser = new UserMapper(userDTO);
-        usersData.updateUserInfo(newUser.getUser());
+        usersData.updateUserInfo(userMapper.mapToModel(userDTO));
     }
     public User loginUser(String username,String password) {
         User foundUser = usersData.getUserByUsernameAndPassword(username,password);
@@ -52,7 +53,11 @@ public class UserManager {
         }
         throw new NotExistingUserException();
     }
-    public Long getUserId(String username){
-        return usersData.getUserId(username);
+    public User getUser(String username){
+        return usersData.getUser(username);
+    }
+
+    public User getLoggedInUser(){
+        return this.getUser(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
     }
 }

@@ -17,11 +17,28 @@ const Login = () => {
                         username: username,
                         password: password
                     }
-                ).then(({ data: { id }}) => {
+                ).then(res => {
+                    // set token in local storage
                     localStorage.setItem(
-                        "id" , id
+                        "token" , res.headers.authorization
                     )
-                    history.push(`/user/account/${ id }`)
+                    // make request to /users/me which is going to return the logged in user
+                        axios.get("http://localhost:8080/user/me",
+                            {
+                                headers:{
+                                    'Authorization' : `${localStorage.getItem("token")}`
+                                }
+                            }
+                            ).
+                        then(data => {
+                            localStorage.setItem(
+                                "user" , JSON.stringify(data.data)
+                            )
+                        }, (error) => {
+                            console.log(error);
+                        });
+
+                    history.push(`/user/account`)
                 }, (error) => {
                     console.log(error);
                 });

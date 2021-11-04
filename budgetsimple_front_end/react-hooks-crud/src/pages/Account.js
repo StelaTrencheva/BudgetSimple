@@ -13,19 +13,14 @@ const Account = () =>  {
 
         useEffect(() => {
             setIsLoading(true);
-            axios.get("http://localhost:8080/user/" + localStorage.getItem("id")).
-            then((data) => {
-                setIsLoading(false);
-                const foundUser = data.data;
-                setUser(
-                    foundUser
-                );
-            })
+            const foundUser = JSON.parse(localStorage.getItem("user"));
+            setUser(
+                foundUser
+            );
+            setIsLoading(false);
 
         },[])
 
-    console.log("User:");
-        console.log(user);
         function editInfoHandler(e) {
             e.preventDefault();
             if(editable){
@@ -33,18 +28,29 @@ const Account = () =>  {
                 console.log(user);
                 axios.put("http://localhost:8080/user/updateUser",
                     {
-                        "address": user.address,
-                        "email": user.email,
-                        "firstName": user.firstName,
-                        "id": user.id,
-                        "lastName": user.lastName,
-                        "password": user.password,
-                        "phoneNum": user.phoneNum,
-                        "position": user.position,
-                        "username": user.username,
-                        "dateOfBirth": user.dateOfBirth
-                    }
-                );
+                        id: user.id,
+                        firstName: user.firstName,
+                        lastName: user.lastName,
+                        email: user.email,
+                        address: user.address,
+                        phoneNum: user.phoneNum,
+                        dateOfBirth: user.dateOfBirth,
+                        username: user.username,
+                        role: user.position,
+                        password: user.password
+                    },
+                    {
+                    headers:{
+                        'Authorization' : `${localStorage.getItem("token")}`
+                    }}
+                )
+                    .then(data => {
+                    localStorage.setItem(
+                        "user" , JSON.stringify(user)
+                    )
+                }, (error) => {
+                    console.log(error);
+                });
             }else{
                 setEditable(true);
             }

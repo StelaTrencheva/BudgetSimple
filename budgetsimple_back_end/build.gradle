@@ -29,6 +29,9 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:3.+'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.26'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.apache.httpcomponents:httpclient'
+    implementation 'com.auth0:java-jwt:3.11.0'
 }
 
 test {

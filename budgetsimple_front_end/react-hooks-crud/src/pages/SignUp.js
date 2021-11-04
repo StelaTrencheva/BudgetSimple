@@ -26,15 +26,28 @@ const SignUp = () => {
                 phoneNum: phoneNum,
                 dateOfBirth: dateOfBirth,
                 username: username,
-                position: "USER",
+                role: "USER",
                 password: password
             }
-        ).then((data) => {
-            console.log(data);
+        ).then(data => {
             localStorage.setItem(
-                "id" , data.data
+                "user" , JSON.stringify(data.data)
             )
-            history.push(`/user/account/${ data.data }`)
+            console.log(data.data);
+            axios.post("http://localhost:8080/user/login",
+                {
+                    username: username,
+                    password: password
+                }
+            ).then(res => {
+                // set token in local storage
+                localStorage.setItem(
+                    "token" , res.headers.authorization
+                )
+            }, (error) => {
+                console.log(error);
+            });
+            history.push(`/user/account`)
         });
     }
 

@@ -1,4 +1,4 @@
-package budget.simple.budgetsimple_back_end.controller.dto;
+package budget.simple.budgetsimple_back_end.model;
 
 public class LoginDTO {
     private String username;

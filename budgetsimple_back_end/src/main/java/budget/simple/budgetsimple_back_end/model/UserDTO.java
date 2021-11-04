@@ -1,9 +1,6 @@
-package budget.simple.budgetsimple_back_end.controller.dto;
+package budget.simple.budgetsimple_back_end.model;
 
-import budget.simple.budgetsimple_back_end.logic.Position;
-import budget.simple.budgetsimple_back_end.logic.UserContact;
-import budget.simple.budgetsimple_back_end.logic.UserCredentials;
-import budget.simple.budgetsimple_back_end.logic.UserPersonalInfo;
+import budget.simple.budgetsimple_back_end.logic.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,11 +14,11 @@ public class UserDTO {
     @Getter @Setter private String address;
     @Getter @Setter private String phoneNum;
     @Getter @Setter private String username;
-    @Getter @Setter private Position position;
+    @Getter @Setter private Role role;
     @Getter @Setter private String password;
     @Getter @Setter private Date dateOfBirth;
 
-    public UserDTO(Long id, UserPersonalInfo personalInfo, UserContact userContact, Position position, UserCredentials userCredentials) {
+    public UserDTO(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials) {
 
         this.firstName = personalInfo.getFirstName();
         this.lastName = personalInfo.getLastName();
@@ -31,7 +28,7 @@ public class UserDTO {
         this.username = userCredentials.getUsername();
         this.password = userCredentials.getPassword();
         this.id=id;
-        this.position = position;
+        this.role = role;
         this.dateOfBirth=personalInfo.getDateOfBirth();
     }
 

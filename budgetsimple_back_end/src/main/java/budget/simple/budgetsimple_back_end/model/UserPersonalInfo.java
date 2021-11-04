@@ -1,4 +1,4 @@
-package budget.simple.budgetsimple_back_end.logic;
+package budget.simple.budgetsimple_back_end.model;
 
 import lombok.Getter;
 import lombok.Setter;
