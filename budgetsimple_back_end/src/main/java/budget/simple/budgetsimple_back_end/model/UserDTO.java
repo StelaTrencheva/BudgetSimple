@@ -18,21 +18,4 @@ public class UserDTO {
     @Getter @Setter private String password;
     @Getter @Setter private Date dateOfBirth;
 
-    public UserDTO(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials) {
-
-        this.firstName = personalInfo.getFirstName();
-        this.lastName = personalInfo.getLastName();
-        this.email = userContact.getEmail();
-        this.phoneNum = userContact.getPhoneNum();
-        this.address = userContact.getAddress();
-        this.username = userCredentials.getUsername();
-        this.password = userCredentials.getPassword();
-        this.id=id;
-        this.role = role;
-        this.dateOfBirth=personalInfo.getDateOfBirth();
-    }
-
-    public UserDTO() {
-
-    }
 }

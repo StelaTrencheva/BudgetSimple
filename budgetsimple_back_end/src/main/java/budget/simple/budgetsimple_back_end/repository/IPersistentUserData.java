@@ -16,7 +16,7 @@ public interface IPersistentUserData extends JpaRepository<User, Long> {
     User getUserByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     @Transactional
-    @Modifying
+    @Modifying(flushAutomatically = true,clearAutomatically = true)
     @Query("update User u set u.firstName = :firstName, u.lastName = :lastName, u.email = :email, u.address = :address, u.phoneNum = :phoneNum, u.username = :username where u.id = :id")
     void updateUserInfo(@Param("firstName") String firstName, @Param("lastName")String lastName, @Param("email")String email, @Param("address")String address, @Param("phoneNum")String phoneNum, @Param("username")String username, @Param("id")Long id);
    }

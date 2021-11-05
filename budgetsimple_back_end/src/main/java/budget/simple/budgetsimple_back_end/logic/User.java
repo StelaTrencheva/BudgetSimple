@@ -185,12 +185,12 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                ", name='" + this.firstName+" "+this.lastName + '\'' +
-                ", email=" + this.email +'\''+
+                " name='" + this.firstName+" "+this.lastName + '\'' +
+                ", email='" + this.email +'\''+
                 ", address='" + this.address+ '\'' +
                 ", phone number='" + this.phoneNum+ '\'' +
-                ", username='" + this.username+
-                ", position='" + this.role +
+                ", username='" + this.username+ '\'' +
+                ", position='" + this.role+ '\'' +
                 '}';
     }
 

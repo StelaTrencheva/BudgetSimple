@@ -53,6 +53,7 @@ public class UserManager {
         }
         throw new NotExistingUserException();
     }
+
     public User getUser(String username){
         return usersData.getUser(username);
     }
