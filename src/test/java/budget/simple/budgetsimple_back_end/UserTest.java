@@ -28,7 +28,7 @@ public class UserTest {
         User user = new User(userId, userPersonalInfo, userContact, Role.USER, userCredentials);
 
         // assert
-        assertEquals("User{" +
+        assertEquals("" +
                 " name='Test0 Test0'" +
                 ", email='Test0@gmail.com'"+
                 ", address='Test0'" +
