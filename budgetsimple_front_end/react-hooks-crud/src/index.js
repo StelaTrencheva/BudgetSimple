@@ -5,6 +5,8 @@ import './index.css'
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Account from "./pages/Account";
+import axios from "axios";
+axios.defaults.withCredentials = true
 
 ReactDOM.render(
   <BrowserRouter>

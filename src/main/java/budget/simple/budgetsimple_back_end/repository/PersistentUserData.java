@@ -26,14 +26,10 @@ public class PersistentUserData implements IUsersData{
         data.save(user);
     }
 
-    @Override
-    public void saveUser(User user) {
-        data.save(user);
-    }
 
     @Override
-    public User getUser(Long id) {
-        return data.findById(id).orElse(null);
+    public User getUserById(String id) {
+        return data.findByUuid(id);
     }
 
     @Override

@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -33,48 +34,47 @@ public class UserManagerTest {
     @Test
     public void getUserTest() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserCredentials userCredentials = new UserCredentials("Test0", "Test0");
         UserContact userContact = new UserContact("Test0@gmail.com", "Test0", "0123456789");
         UserPersonalInfo userPersonalInfo = new UserPersonalInfo("Test0", "Test0", new Date());
         User user = new User(userId, userPersonalInfo, userContact, Role.USER, userCredentials);
 
         IUsersData usersData = mock(IUsersData.class);
-        when(usersData.getUser(userId)).thenReturn(user);
+        when(usersData.getUserById(userId)).thenReturn(user);
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
 
         // act
-        User foundUser = userManager.getUser(userId);
+        User foundUser = userManager.getUserById(userId);
 
         // assert
         assertEquals(foundUser, user);
-        verify(usersData, times(1)).getUser(userId);
+        verify(usersData, times(1)).getUserById(userId);
     }
 
     @Test()
     public void getUserTestException() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         IUsersData usersData = mock(IUsersData.class);
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
 
         NotExistingUserException thrown = Assertions.assertThrows(NotExistingUserException.class, () -> {
             //Code under test
-            userManager.getUser(userId);
+            userManager.getUserById(userId);
         });
         Assertions.assertEquals("This user does not exist in the system!", thrown.getMessage());
-        verify(usersData, times(1)).getUser(userId);
+        verify(usersData, times(1)).getUserById(userId);
     }
 
     @Test
     public void getAllUsersTest() {
         //arrange
-        Long idSeeker = 1L;
         List<User> usersList = new ArrayList<>();
-        usersList.add(new User(idSeeker++, new UserPersonalInfo("Test0", "Test0", new Date()), new UserContact("Test0@gmail.com", "Test0", "0123456789"), Role.USER, new UserCredentials("Test0", "Test0")));
-        usersList.add(new User(idSeeker++, new UserPersonalInfo("Test1", "Test1", new Date()), new UserContact("Test1@gmail.com", "Test1", "0123456789"), Role.USER, new UserCredentials("Test1", "Test1")));
-        usersList.add(new User(idSeeker++, new UserPersonalInfo("Test2", "Test2", new Date()), new UserContact("Test2@gmail.com", "Test2", "0123456789"), Role.USER, new UserCredentials("Test2", "Test2")));
-        usersList.add(new User(idSeeker++, new UserPersonalInfo("Test3", "Test3", new Date()), new UserContact("Test3@gmail.com", "Test3", "0123456789"), Role.USER, new UserCredentials("Test3", "Test3")));
+        usersList.add(new User((UUID.randomUUID()).toString(), new UserPersonalInfo("Test0", "Test0", new Date()), new UserContact("Test0@gmail.com", "Test0", "0123456789"), Role.USER, new UserCredentials("Test0", "Test0")));
+        usersList.add(new User((UUID.randomUUID()).toString(), new UserPersonalInfo("Test1", "Test1", new Date()), new UserContact("Test1@gmail.com", "Test1", "0123456789"), Role.USER, new UserCredentials("Test1", "Test1")));
+        usersList.add(new User((UUID.randomUUID()).toString(), new UserPersonalInfo("Test2", "Test2", new Date()), new UserContact("Test2@gmail.com", "Test2", "0123456789"), Role.USER, new UserCredentials("Test2", "Test2")));
+        usersList.add(new User((UUID.randomUUID()).toString(), new UserPersonalInfo("Test3", "Test3", new Date()), new UserContact("Test3@gmail.com", "Test3", "0123456789"), Role.USER, new UserCredentials("Test3", "Test3")));
 
         IUsersData usersData = mock(IUsersData.class);
         when(usersData.getUsers()).thenReturn(usersList);
@@ -92,7 +92,7 @@ public class UserManagerTest {
     @Test()
     public void getAllUsersTestException() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         IUsersData usersData = mock(IUsersData.class);
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
 
@@ -106,8 +106,8 @@ public class UserManagerTest {
 
     @Test()
     public void addUserTest() {
+        String userId = (UUID.randomUUID()).toString();
         // arrange
-        Long userId = 1L;
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userId);
         userDTO.setFirstName("Test0");
@@ -121,7 +121,7 @@ public class UserManagerTest {
 
         IUsersData usersData = mock(IUsersData.class);
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
-        doNothing().when(usersData).addUser(new UserMapper(new BCryptPasswordEncoder()).mapToModel(userDTO));
+        lenient().doNothing().when(usersData).addUser(new UserMapper(new BCryptPasswordEncoder()).mapToModel(userDTO));
 
         //act
         userManager.addUser(userDTO);
@@ -133,7 +133,7 @@ public class UserManagerTest {
     @Test
     public void updateUserInfoTest(){
         //arrange
-        Long userId=1L;
+        String userId = (UUID.randomUUID()).toString();
         User oldUser = new User(userId, new UserPersonalInfo("Test1", "Test1",new Date()), new UserContact("Test1@gmail.com","Test1","0123456789"), Role.USER, new UserCredentials("Test1", "Test1"));
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userId);
@@ -147,19 +147,19 @@ public class UserManagerTest {
         userDTO.setPhoneNum("Test0");
 
         IUsersData usersData=mock(IUsersData.class);
-        when(usersData.getUser(userId)).thenReturn(oldUser);
-        doNothing().when(usersData).updateUserInfo(oldUser);
+        when(usersData.getUserById(userId)).thenReturn(oldUser);
+        doNothing().when(usersData).updateUserInfo(new UserMapper(new BCryptPasswordEncoder()).mapToModel(userDTO));
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
         //act
         userManager.updateUserInfo(userDTO);
         //assert
         verify(usersData,times(1)).updateUserInfo(oldUser);
-        verify(usersData,times(1)).getUser(userId);
+        verify(usersData,times(1)).getUserById(userId);
     }
     @Test
     public void getUserByUsernameTest() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserCredentials userCredentials = new UserCredentials("Test0", "Test0");
         UserContact userContact = new UserContact("Test0@gmail.com", "Test0", "0123456789");
         UserPersonalInfo userPersonalInfo = new UserPersonalInfo("Test0", "Test0", new Date());
@@ -180,7 +180,7 @@ public class UserManagerTest {
     @Test()
     public void updateUserInfoTestException() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userId);
         userDTO.setFirstName("Test0");
@@ -205,7 +205,7 @@ public class UserManagerTest {
     @Test()
     public void addUserInfoTestException() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userId);
         userDTO.setFirstName("Test0");
@@ -230,7 +230,7 @@ public class UserManagerTest {
     @Test
     public void loginUserTest() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserCredentials userCredentials = new UserCredentials("Test0", "Test0");
         UserContact userContact = new UserContact("Test0@gmail.com", "Test0", "0123456789");
         UserPersonalInfo userPersonalInfo = new UserPersonalInfo("Test0", "Test0", new Date());
@@ -251,7 +251,7 @@ public class UserManagerTest {
     @Test()
     public void loginUserTestException() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         IUsersData usersData = mock(IUsersData.class);
         UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
         when(usersData.getUserByUsernameAndPassword("Test0","Test0")).thenReturn(null);

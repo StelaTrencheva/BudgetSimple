@@ -2,6 +2,7 @@ import React from 'react';
 import { Navbar,Container,Nav } from 'react-bootstrap'
 import logo from "../images/logo.png";
 import {NavLink} from "react-router-dom";
+import * as Service from '../service/Service'
 
 
 const Navigation = () => {
@@ -16,7 +17,7 @@ const Navigation = () => {
                         <NavLink to="/">Wallets</NavLink>
                         <NavLink to={`/user/account`}>Account</NavLink>
                         <NavLink to="/">Contact</NavLink>
-                        <NavLink to="/sign-in">Logout</NavLink>
+                        <NavLink to="/" onClick = {Service.logoutUser}>Logout</NavLink>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

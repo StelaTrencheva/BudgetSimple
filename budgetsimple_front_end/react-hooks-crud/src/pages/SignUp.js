@@ -1,7 +1,7 @@
 import React, {Component, useState} from "react";
 import logo from "../images/logo.png"
 import {Link, useHistory} from "react-router-dom";
-import axios from "axios";
+import * as Service from '../service/Service'
 
 const SignUp = () => {
     localStorage.clear();
@@ -14,41 +14,39 @@ const SignUp = () => {
     const [username,setUsername] = useState(null);
     const [password,setPassword] = useState(null);
     const [dateOfBirth,setDateOfBirth] = useState(null);
+    
+    const [error,setError] = useState([]);
+
+    const logInUser = async () => {
+        try {
+            await Service.logInUser(username, password);
+        } catch (err) {
+            setError(currentErrors => [...currentErrors, err]);
+        }
+    }
+       const createUser = async () => {
+        try{
+            await Service.createUser(firstName, lastName, email, address, phoneNum, dateOfBirth, username, "USER", password)
+            logInUser(username, password);
+        }
+        catch(err){
+            setError(oldArray => [...oldArray,
+                err.message
+            ]);
+            }
+        }
+       
 
     function submitHandler(e) {
         e.preventDefault();
-        axios.post("http://localhost:8080/user/createUser",
-            {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                address: address,
-                phoneNum: phoneNum,
-                dateOfBirth: dateOfBirth,
-                username: username,
-                role: "USER",
-                password: password
-            }
-        ).then(data => {
-            localStorage.setItem(
-                "user" , JSON.stringify(data.data)
-            )
-            console.log(data.data);
-            axios.post("http://localhost:8080/user/login",
-                {
-                    username: username,
-                    password: password
-                }
-            ).then(res => {
-                // set token in local storage
-                localStorage.setItem(
-                    "token" , res.headers.authorization
-                )
-            }, (error) => {
-                console.log(error);
-            });
-            history.push(`/user/account`)
-        });
+        setError(oldArray => []);
+        if(firstName === null || lastName === null || email === null || address === null || phoneNum === null || username === null || password === null)
+            {setError(oldArray => [...oldArray, 
+               "Please fill all the fields!"
+            ]);
+        }else{
+            createUser();
+        }
     }
 
         return (
@@ -56,7 +54,13 @@ const SignUp = () => {
                 <div className="auth-inner">
                     <form>
                         <img className="logo" src={logo} alt="logo"/>
-
+                        {error.map(error => (
+                            <div className="form-group form-margin">
+                            <div className="alert alert-warning" role="alert">{error}</div>
+                        </div>
+                        ))}
+                        <button className="btn btn-google"><a href="#"><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Sign up with Google</a> </button>
+                
                         <div className="form-group form-margin">
                             <label>First name</label>
                             <input onChange = {(fn) => setFirstName(fn.target.value)} type="firstName" className="form-control" placeholder="Enter first name" />
@@ -119,4 +123,5 @@ const SignUp = () => {
             </div>
         );
 }
+
 export default SignUp;

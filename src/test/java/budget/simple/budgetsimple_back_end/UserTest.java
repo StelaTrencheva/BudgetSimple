@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,7 +20,7 @@ public class UserTest {
     @Test
     public void toStringTest() {
         // arrange
-        Long userId = 1L;
+        String userId = (UUID.randomUUID()).toString();
         UserCredentials userCredentials = new UserCredentials("Test0", "Test0");
         UserContact userContact = new UserContact("Test0@gmail.com", "Test0", "0123456789");
         UserPersonalInfo userPersonalInfo = new UserPersonalInfo("Test0", "Test0", new Date());
@@ -28,7 +29,7 @@ public class UserTest {
         User user = new User(userId, userPersonalInfo, userContact, Role.USER, userCredentials);
 
         // assert
-        assertEquals("" +
+        assertEquals("User{" +
                 " name='Test0 Test0'" +
                 ", email='Test0@gmail.com'"+
                 ", address='Test0'" +

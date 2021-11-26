@@ -7,8 +7,7 @@ import java.util.List;
 public interface IUsersData {
     List<User> getUsers();
     void addUser(User user);
-    void saveUser(User user);
-    User getUser(Long id);
+    User getUserById(String id);
     User getUser(String username);
     User getUserByUsernameAndPassword(String username, String password);
     void updateUserInfo(User user);

@@ -7,6 +7,7 @@ import budget.simple.budgetsimple_back_end.model.UserCredentials;
 import budget.simple.budgetsimple_back_end.model.UserPersonalInfo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import java.util.UUID;
 
 @Component
 public class UserMapper {
@@ -21,6 +22,7 @@ public class UserMapper {
         UserCredentials userCredentials = new UserCredentials(userDTO.getUsername(), encryptedPassword);
         UserContact userContact = new UserContact(userDTO.getEmail(),userDTO.getAddress(),userDTO.getPhoneNum());
         UserPersonalInfo userPersonalInfo = new UserPersonalInfo(userDTO.getFirstName(),userDTO.getLastName(),userDTO.getDateOfBirth());
+
         return new User(userDTO.getId(),userPersonalInfo,userContact,userDTO.getRole(),userCredentials);
     }
 }

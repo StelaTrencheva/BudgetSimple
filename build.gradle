@@ -47,6 +47,13 @@ test {
     useJUnitPlatform()
 }
 
+sonarqube {
+    properties {
+        property "sonar.projectKey", "BudgetSimple"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.login", "a602644a5a5515acb8841cd18e6fe49f683c2b2d"
+    }
+}
 //bootBuildImage {
  //   builder = 'paketobuildpacks/builder:tiny'
   //  environment = ['BP_NATIVE_IMAGE': 'true']

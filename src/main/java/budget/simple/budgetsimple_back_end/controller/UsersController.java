@@ -14,14 +14,13 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000",exposedHeaders = "Authorization")
 @RequestMapping("/user")
 public class UsersController {
     @Autowired
     private UserManager um;
 
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserPath(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<User> getUserPath(@PathVariable(value = "id") String id) {
         User user = um.getUser(id);
         return ResponseEntity.ok().body(user);
 
@@ -50,6 +49,7 @@ public class UsersController {
     public User loginUser(@RequestBody LoginDTO loginDTO) {
         return um.loginUser(loginDTO.getUsername(),loginDTO.getPassword());
     }
+
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.ACCEPTED)

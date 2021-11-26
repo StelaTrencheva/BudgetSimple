@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,7 +46,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("role",auth.getAuthorities().iterator().next().getAuthority())
                 .withExpiresAt(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(AuthenticationConfigConstants.SECRET.getBytes()));
-        response.addHeader(AuthenticationConfigConstants.HEADER_STRING, AuthenticationConfigConstants.TOKEN_PREFIX + token);
-    }
 
+        Cookie jwtCookie = new Cookie(AuthenticationConfigConstants.AUTH_COOKIE, token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setSecure(true);
+        jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(60 * 60);
+
+        response.addCookie(jwtCookie);
+    }
 }

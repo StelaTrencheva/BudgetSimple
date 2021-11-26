@@ -6,8 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import budget.simple.budgetsimple_back_end.repository.IUsersData;
 import budget.simple.budgetsimple_back_end.exception.*;
+
+import javax.servlet.http.Cookie;
 import java.util.List;
-// tests with mocking
+import java.util.UUID;
 
 @Service
 public class UserManager {
@@ -19,8 +21,8 @@ public class UserManager {
         this.userMapper = userMapper;
     }
 
-    public User getUser(Long id){
-        User user = usersData.getUser(id);
+    public User getUserById(String id){
+        User user = usersData.getUserById(id);
         if (user == null){
             throw new NotExistingUserException();
         }
@@ -37,10 +39,13 @@ public class UserManager {
         if (usersData.getUser(userDTO.getUsername()) != null){
             throw new ExistingUserException();
         }
+        UUID uuid = UUID.randomUUID();
+        String uuidAsString = uuid.toString();
+        userDTO.setId(uuidAsString);
         usersData.addUser(userMapper.mapToModel(userDTO));
     }
     public void updateUserInfo(UserDTO userDTO) {
-        User old = usersData.getUser(userDTO.getId());
+        User old = usersData.getUserById(userDTO.getId());
         if (old == null) {
             throw new NotExistingUserException();
         }

@@ -4,6 +4,9 @@ import budget.simple.budgetsimple_back_end.filter.JWTAuthenticationFilter;
 import budget.simple.budgetsimple_back_end.filter.JWTAuthorizationFilter;
 import budget.simple.budgetsimple_back_end.logic.AuthenticationUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 
 @EnableWebSecurity
@@ -20,12 +26,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationUserDetailsService authenticationUserDetailService;
 
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
 
     @Override protected void configure(HttpSecurity http) throws Exception {
         JWTAuthenticationFilter customFilter = new JWTAuthenticationFilter(authenticationManager());
         customFilter.setFilterProcessesUrl("/user/login");
-                http
-                        .cors()
+                http.
+                        cors()
                         .and()
                         .csrf().disable().authorizeRequests()
                         .antMatchers(HttpMethod.POST, AuthenticationConfigConstants.SIGN_UP_URL).permitAll()
@@ -38,8 +55,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .and()
                         .addFilter(customFilter)
                         .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                        // this disables session creation on Spring Security
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .and()
+                        .logout()
+                        .deleteCookies("auth")
+                        .logoutUrl("/user/logout");
     }
 
     @Override

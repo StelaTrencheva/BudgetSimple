@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.Date;
 
 public class UserDTO {
-    @Getter @Setter private Long id;
+    @Getter @Setter private String id;
     @Getter @Setter private String firstName;
     @Getter @Setter private String lastName;
     @Getter @Setter private String email;

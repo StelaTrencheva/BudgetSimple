@@ -29,28 +29,18 @@ import static javax.persistence.GenerationType.SEQUENCE;
         })
 public class User {
     @Id
-    @SequenceGenerator
-            (
-                    name="user_sequence",
-                    sequenceName = "user_sequence",
-                    allocationSize = 1
-            )
-    @GeneratedValue
-            (
-                    strategy = SEQUENCE,
-                    generator = "user_sequence"
-
-            )
     @Column
             (
                     name = "id",
-                    updatable = false
+                    updatable = false,
+                    columnDefinition = "varchar(255)"
             )
-    @Getter @Setter private Long id;
+    @Getter @Setter private String id;
     @Column
             (
                     name = "first_name",
-                    nullable = false
+                    nullable = false,
+                    columnDefinition = "TEXT"
             )
     @Getter @Setter private String firstName;
     @Column
@@ -144,7 +134,7 @@ public class User {
             )
     @Getter @Setter private Date firstWorkingDay;
 
-    public User(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials) {
+    public User(String id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials) {
 
         this.firstName = personalInfo.getFirstName();
         this.lastName = personalInfo.getLastName();
@@ -157,7 +147,7 @@ public class User {
         this.role = role;
         this.dateOfBirth=personalInfo.getDateOfBirth();
     }
-    public User(Long id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials, UserWorkingInfo userWorkingInfo) {
+    public User(String id, UserPersonalInfo personalInfo, UserContact userContact, Role role, UserCredentials userCredentials, UserWorkingInfo userWorkingInfo) {
 
         this(id,personalInfo,userContact, role,userCredentials);
         this.bankAccount=userWorkingInfo.getBankAccount();

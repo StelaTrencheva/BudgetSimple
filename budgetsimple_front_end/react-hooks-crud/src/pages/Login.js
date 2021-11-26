@@ -2,55 +2,43 @@ import React, { Component } from "react";
 import logo from "../images/logo.png"
 import {Link, useHistory} from "react-router-dom";
 import {useState} from "react";
-import axios from "axios";
+import * as Service from '../service/Service'
 
 const Login = () => {
-            localStorage.clear();
             const history = useHistory();
             const [username,setUsername] = useState(null);
             const [password,setPassword] = useState(null);
+            const [error,setError] = useState([]);
+            const logInUser = async () => {
+                try {
+                    await Service.logInUser(username, password);
+                    history.push("/user/account");
+                } catch (err) {
+                    setError(currentErrors => [...currentErrors, err.message]);
+                }
+            }
 
             function submitHandler(e) {
                 e.preventDefault();
-                axios.post("http://localhost:8080/user/login",
-                    {
-                        username: username,
-                        password: password
-                    }
-                ).then(res => {
-                    // set token in local storage
-                    localStorage.setItem(
-                        "token" , res.headers.authorization
-                    )
-                    // make request to /users/me which is going to return the logged in user
-                        axios.get("http://localhost:8080/user/me",
-                            {
-                                headers:{
-                                    'Authorization' : `${localStorage.getItem("token")}`
-                                }
-                            }
-                            ).
-                        then(data => {
-                            localStorage.setItem(
-                                "user" , JSON.stringify(data.data)
-                            )
-                        }, (error) => {
-                            console.log(error);
-                        });
-
-                    history.push(`/user/account`)
-                }, (error) => {
-                    console.log(error);
-                });
-            }
+                setError(oldArray => []);
+                if(username === "" || password === ""){
+                    setError(oldArray => [...oldArray, 
+                        "Please fill all the fields!"
+                     ]);
+                }else{
+                logInUser();
+            }}
 
         return (
             <div className="auth-wrapper">
                 <div className="auth-inner">
             <form>
                 <img className="logo" src={logo} alt="logo"/>
-
-
+                {error.map(error => (
+                    <div className="form-group form-margin">
+                    <div className="alert alert-warning" role="alert">{error}</div>
+                    </div>
+                ))}
                 <div className="form-group form-margin">
                     <label>Username</label>
                     <input type="email" className="form-control" placeholder="Enter username" onChange = {(u) => setUsername(u.target.value)}/>
@@ -69,6 +57,7 @@ const Login = () => {
                 </div>
 
                 <button type="submit" className="btn btn-primary" onClick={submitHandler}>Sign In</button>
+                <button className="btn btn-google"><a href="#"><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Sign in with Google</a> </button>
                 <p className="forgot-password text-right">
                     Forgot password?
                 </p>
