@@ -14,7 +14,7 @@ const Navigation = () => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         <NavLink to="/">Dashboard</NavLink>
-                        <NavLink to="/">Wallets</NavLink>
+                        <NavLink to={`/user/wallets`}>Wallets</NavLink>
                         <NavLink to={`/user/account`}>Account</NavLink>
                         <NavLink to="/">Contact</NavLink>
                         <NavLink to="/" onClick = {Service.logoutUser}>Logout</NavLink>

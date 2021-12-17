@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import logo from "../images/logo.png"
 import {Link, useHistory} from "react-router-dom";
-import {useState} from "react";
 import * as Service from '../service/Service'
 
 const Login = () => {
@@ -18,6 +17,10 @@ const Login = () => {
                 }
             }
 
+            useEffect(() => {
+                Service.logoutUser();
+            }, [])
+
             function submitHandler(e) {
                 e.preventDefault();
                 setError(oldArray => []);
@@ -30,8 +33,6 @@ const Login = () => {
             }}
 
         return (
-            <div className="auth-wrapper">
-                <div className="auth-inner">
             <form>
                 <img className="logo" src={logo} alt="logo"/>
                 {error.map(error => (
@@ -58,7 +59,7 @@ const Login = () => {
 
                 <button type="submit" className="btn btn-primary" onClick={submitHandler}>Sign In</button>
                 <button className="btn btn-google"><a href="#"><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Sign in with Google</a> </button>
-                <p className="forgot-password text-right">
+                <p className="forgot-password text-access">
                     Forgot password?
                 </p>
                 <p className="forgot-password">or</p>
@@ -66,8 +67,6 @@ const Login = () => {
                     <Link to={"/sign-up"}>Don't have an account?</Link>
                 </p>
             </form>
-                </div>
-            </div>
         );
     }
     export default Login;

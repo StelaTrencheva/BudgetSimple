@@ -1,13 +1,12 @@
 package budget.simple.budgetsimple_back_end.logic.mapper;
 
-import budget.simple.budgetsimple_back_end.model.UserDTO;
-import budget.simple.budgetsimple_back_end.logic.User;
-import budget.simple.budgetsimple_back_end.model.UserContact;
-import budget.simple.budgetsimple_back_end.model.UserCredentials;
-import budget.simple.budgetsimple_back_end.model.UserPersonalInfo;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
+import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserContact;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserCredentials;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserPersonalInfo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import java.util.UUID;
 
 @Component
 public class UserMapper {

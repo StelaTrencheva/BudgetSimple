@@ -2,9 +2,9 @@ package budget.simple.budgetsimple_back_end.controller;
 
 
 import budget.simple.budgetsimple_back_end.model.LoginDTO;
-import budget.simple.budgetsimple_back_end.model.UserDTO;
-import budget.simple.budgetsimple_back_end.logic.User;
-import budget.simple.budgetsimple_back_end.logic.UserManager;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
+import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.logic.user.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -60,3 +60,90 @@ export const updateUser = async (id, firstName, lastName, email, address, phoneN
         throw new Error(err.message)
     }
 }
+
+export const createWallet = async (creator, budget, title, description, currency, dateOfCreation) => {
+    try{
+        const wallet = await axios.post(`${URL}/wallet/create`,
+        {
+            creator,
+            budget,
+            title,
+            description,
+            currency,
+            dateOfCreation
+
+        });
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const createTransaction = async (walletId, creator, amount, title, description, category, dateOfCreation, memberAmountDTO) => {
+    try{
+        const transaction = await axios.post(`${URL}/wallet/${walletId}/transaction/create`,
+        {
+            walletId,
+            creator,
+            amount,
+            title,
+            description,
+            category,
+            dateOfCreation,
+            memberAmountDTO
+
+        });
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const getWalletById = async (walletId) => {
+    try{
+        const wallet = await axios.get(`${URL}/wallet/${walletId}`);
+        return wallet.data;
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const getTransactionsByWalletId = async (walletId) => {
+    try{
+        const transactions = await axios.get(`${URL}/wallet/${walletId}/transaction/getAll`);
+        return transactions.data;
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const deleteWallet = async (walletId) => {
+    try{
+        const result = await axios.delete(`${URL}/wallet/${walletId}/delete`);
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const changeWalletBudget = async (walletId, budget) => {
+    try{
+        await axios.put(`${URL}/wallet/${walletId}?budget=${budget}`);
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+
+export const getTransactionCategories = async () => {
+    try{
+        const transactionCategories = await axios.get(`${URL}/wallet/transaction/categories`);
+        return transactionCategories.data;
+    }
+    catch(err){
+        throw new Error(err.message)
+    }
+}
+

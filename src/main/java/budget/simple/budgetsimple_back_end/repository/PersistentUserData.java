@@ -1,6 +1,6 @@
 package budget.simple.budgetsimple_back_end.repository;
 
-import budget.simple.budgetsimple_back_end.logic.User;
+import budget.simple.budgetsimple_back_end.logic.user.User;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 

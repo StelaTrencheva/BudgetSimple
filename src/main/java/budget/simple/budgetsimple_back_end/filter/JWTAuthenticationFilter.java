@@ -1,6 +1,6 @@
 package budget.simple.budgetsimple_back_end.filter;
 
-import budget.simple.budgetsimple_back_end.logic.User;
+import budget.simple.budgetsimple_back_end.logic.user.User;
 import budget.simple.budgetsimple_back_end.security_config.AuthenticationConfigConstants;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

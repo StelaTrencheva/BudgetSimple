@@ -1,8 +1,9 @@
 package budget.simple.budgetsimple_back_end.repository;
-import budget.simple.budgetsimple_back_end.model.UserContact;
-import budget.simple.budgetsimple_back_end.model.UserCredentials;
-import budget.simple.budgetsimple_back_end.model.UserPersonalInfo;
-import budget.simple.budgetsimple_back_end.logic.*;
+import budget.simple.budgetsimple_back_end.logic.user.Role;
+import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserContact;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserCredentials;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserPersonalInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

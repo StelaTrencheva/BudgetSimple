@@ -1,10 +1,10 @@
 package budget.simple.budgetsimple_back_end;
 
-import budget.simple.budgetsimple_back_end.logic.Role;
-import budget.simple.budgetsimple_back_end.logic.User;
-import budget.simple.budgetsimple_back_end.model.UserContact;
-import budget.simple.budgetsimple_back_end.model.UserCredentials;
-import budget.simple.budgetsimple_back_end.model.UserPersonalInfo;
+import budget.simple.budgetsimple_back_end.logic.user.Role;
+import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserContact;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserCredentials;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserPersonalInfo;
 import budget.simple.budgetsimple_back_end.repository.IPersistentUserData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

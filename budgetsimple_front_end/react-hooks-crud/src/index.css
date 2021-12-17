@@ -149,7 +149,6 @@ a,a:hover{
   background-color: rgba(240, 221, 254, 0.95);
 }
 .smallLogo{
-  weight:150px;
   height: 100px;
   display: block;
 }
@@ -188,4 +187,8 @@ Nav a{
 }
 .btn-google a{
   text-decoration: none;
+}
+
+.wallet-row h5{
+  line-height: 100px;
 }

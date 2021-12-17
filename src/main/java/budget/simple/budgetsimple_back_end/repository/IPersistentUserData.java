@@ -1,6 +1,6 @@
 package budget.simple.budgetsimple_back_end.repository;
 
-import budget.simple.budgetsimple_back_end.logic.User;
+import budget.simple.budgetsimple_back_end.logic.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 
-public interface IPersistentUserData extends JpaRepository<User, Long> {
+public interface IPersistentUserData extends JpaRepository<User, String> {
     @Query("SELECT u FROM User u WHERE u.username = :username")
     User findUserByUsername(@Param("username") String username);
 
