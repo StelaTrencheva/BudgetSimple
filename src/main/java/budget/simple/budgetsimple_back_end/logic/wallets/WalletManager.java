@@ -1,19 +1,30 @@
 package budget.simple.budgetsimple_back_end.logic.wallets;
 
 import budget.simple.budgetsimple_back_end.logic.mapper.TransactionMapper;
+import budget.simple.budgetsimple_back_end.logic.mapper.UserMapper;
 import budget.simple.budgetsimple_back_end.logic.mapper.WalletMapper;
 import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.TransactionDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.WalletDTO;
+import budget.simple.budgetsimple_back_end.repository.IPersistentSharableCodeData;
 import budget.simple.budgetsimple_back_end.repository.IPersistentTransactionData;
 import budget.simple.budgetsimple_back_end.repository.IPersistentWalletData;
+import com.google.zxing.WriterException;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.EnumSet;
 import java.util.List;
+
+import static org.apache.commons.io.FileUtils.readFileToByteArray;
 
 @Service
 public class WalletManager {
@@ -22,11 +33,13 @@ public class WalletManager {
 
     private final IPersistentWalletData walletData;
     private final IPersistentTransactionData transactionData;
+    private final IPersistentSharableCodeData generatedCodesData;
     private final WalletMapper walletMapper;
     private final TransactionMapper transactionMapper;
 
-    public WalletManager(IPersistentTransactionData transactionData, IPersistentWalletData walletData, WalletMapper walletMapper, TransactionMapper transactionMapper) {
+    public WalletManager(IPersistentTransactionData transactionData, IPersistentSharableCodeData generatedCodes, IPersistentWalletData walletData, WalletMapper walletMapper, TransactionMapper transactionMapper) {
         this.transactionData = transactionData;
+        this.generatedCodesData = generatedCodes;
         this.walletData = walletData;
         this.walletMapper = walletMapper;
         this.transactionMapper = transactionMapper;
@@ -40,7 +53,10 @@ public class WalletManager {
         Wallet wallet = walletMapper.mapToModel(walletDTO);
         walletData.save(wallet);
     }
-    public void deleteWallet(String walletId){
+    public void deleteWallet(String walletId) throws IOException {
+        Wallet wallet = this.getWalletById(walletId);
+        wallet.getGeneratedCode().deleteQRCodeImage();
+        generatedCodesData.deleteById(wallet.getGeneratedCode().getCodeId());
         walletData.deleteById(walletId);
     }
 
@@ -68,11 +84,32 @@ public class WalletManager {
         if(transactionDTO.getImage()!=null){
             newTransaction.setImage(im.createImage(transactionDTO.getImage()));
         }
-        List<Transaction> walletTransactions = wallet.getTransactions();
-        walletTransactions.add(newTransaction);
-        wallet.setTransactions(walletTransactions);
-       // transactionData.save(newTransaction);
+        wallet.addTransaction(newTransaction);
         walletData.save(wallet);
-
+    }
+    public Wallet getWalletByCode(String code){
+        ISharableCode generatedCode = generatedCodesData.findByLink(code);
+        return walletData.findWalletByGeneratedCode(generatedCode);
+    }
+    public void addNewMemberRequest(UserDTO user, String walletId) {
+        Wallet wallet = getWalletById(walletId);
+        WalletEntryRequest walletEntryRequest = new WalletEntryRequest(new UserMapper(new BCryptPasswordEncoder()).mapToModel(user));
+        wallet.addEntryRequest(walletEntryRequest);
+        walletData.save(wallet);
+    }
+    public void acceptWalletEntryRequest(String walletId, WalletEntryRequest request) {
+        Wallet wallet = getWalletById(walletId);
+        wallet.addMember(request.getUser());
+        wallet.removeEntryRequest(request);
+        walletData.save(wallet);
+    }
+    public void rejectWalletEntryRequest(String walletId, WalletEntryRequest request) {
+        Wallet wallet = getWalletById(walletId);
+        wallet.removeEntryRequest(request);
+        walletData.save(wallet);
+    }
+    public byte[] getWalletQrCode(String wallet_id) throws IOException {
+        Wallet wallet = this.getWalletById(wallet_id);
+        return Base64.getEncoder().encode(readFileToByteArray(new File(wallet.getGeneratedCode().getPath() + wallet.getGeneratedCode().getCodeId() + ".png")));
     }
 }

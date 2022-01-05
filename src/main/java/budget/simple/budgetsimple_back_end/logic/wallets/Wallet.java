@@ -1,11 +1,14 @@
 package budget.simple.budgetsimple_back_end.logic.wallets;
 
 import budget.simple.budgetsimple_back_end.logic.user.User;
+import com.google.zxing.WriterException;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.*;
 
 @Entity(name = "Wallet")
@@ -75,6 +78,8 @@ public class Wallet{
     @OneToMany(cascade = CascadeType.ALL)
     @Getter @Setter private List<Transaction> transactions;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @Getter @Setter private List<WalletEntryRequest> walletEntryRequests;
 
     public Wallet(User creator, Double budget, String title, String description, String currency, Date dataOfCreation){
         this.id = UUID.randomUUID().toString();
@@ -87,7 +92,14 @@ public class Wallet{
         this.creator = creator;
         this.members.add(creator);
         this.transactions = new ArrayList<>();
-        generatedCode = new WalletQRCode();
+        this.walletEntryRequests = new ArrayList<>();
+        try {
+            ISharableCode code = new WalletQRCode();
+            code.generateQRCodeImage(200, 200);
+            this.generatedCode = code;
+        }catch(WriterException | IOException e){
+            e.printStackTrace();
+        }
     }
 
     protected Wallet(){
@@ -105,5 +117,18 @@ public class Wallet{
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void addTransaction(Transaction transaction){
+        this.transactions.add(transaction);
+    }
+    public void addEntryRequest(WalletEntryRequest walletEntryRequest){
+        this.walletEntryRequests.add(walletEntryRequest);
+    }
+    public void addMember(User user){
+        this.members.add(user);
+    }
+    public void removeEntryRequest(WalletEntryRequest request){
+        this.walletEntryRequests.removeIf(request1 -> request.getId().equals(request1.getId()));
     }
 }

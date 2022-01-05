@@ -11,14 +11,24 @@ const Login = () => {
             const logInUser = async () => {
                 try {
                     await Service.logInUser(username, password);
-                    history.push("/user/account");
+                    console.log(localStorage.getItem("redirect_path"))
+                    if (localStorage.getItem("redirect_path") === null) {
+                        history.push("/user/account");
+                    }else{
+                        let redirect_path = localStorage.getItem("redirect_path");
+                        localStorage.removeItem("redirect_path");
+                        history.push(redirect_path);
+                    }
                 } catch (err) {
                     setError(currentErrors => [...currentErrors, err.message]);
                 }
             }
 
             useEffect(() => {
-                Service.logoutUser();
+                Service.logoutUser()
+                if (localStorage.getItem("redirect_path") != null) {
+                    setError(currentErrors => [...currentErrors,"You need to login in order to enter a wallet!"]);
+                }
             }, [])
 
             function submitHandler(e) {

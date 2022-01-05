@@ -37,4 +37,5 @@ public class ImageMapper{
         walletDTO.setDataOfCreation(wallet.getDataOfCreation());
         return walletDTO;
     }
+
 }

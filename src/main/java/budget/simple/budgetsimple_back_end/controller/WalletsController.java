@@ -1,18 +1,18 @@
 package budget.simple.budgetsimple_back_end.controller;
 
 import budget.simple.budgetsimple_back_end.logic.user.User;
-import budget.simple.budgetsimple_back_end.logic.wallets.Transaction;
-import budget.simple.budgetsimple_back_end.logic.wallets.TransactionCategory;
-import budget.simple.budgetsimple_back_end.logic.wallets.Wallet;
-import budget.simple.budgetsimple_back_end.logic.wallets.WalletManager;
+import budget.simple.budgetsimple_back_end.logic.wallets.*;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.TransactionDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.WalletDTO;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 
@@ -39,7 +39,7 @@ public class WalletsController {
         // Delete wallet
         @DeleteMapping("/{id}/delete")
         @ResponseStatus(HttpStatus.OK)
-        public void deleteWallet(@PathVariable(value = "id") String id) {
+        public void deleteWallet(@PathVariable(value = "id") String id) throws IOException {
                 wm.deleteWallet(id);
         }
 
@@ -49,6 +49,7 @@ public class WalletsController {
         public Wallet getWallet(@PathVariable(value = "id") String id) {
                 return wm.getWalletById(id);
         }
+
 
         // Change wallet budget
         @PutMapping("/{id}")
@@ -76,6 +77,43 @@ public class WalletsController {
         @ResponseStatus(HttpStatus.ACCEPTED)
         public List<TransactionCategory> getAllTransactionCategories() {
                 return wm.getAllTransactionCategories();
+        }
+
+        // Get wallet by code id
+        @GetMapping("/code/{code}")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Wallet getWalletByCode(@PathVariable(value = "code") String code) {
+                return wm.getWalletByCode(code);
+        }
+        // Get wallet qr code image
+        @GetMapping("/qrCode/{id}")
+        public @ResponseBody byte[] getWalletQrCodeImage(@PathVariable(value = "id") String id) throws IOException {
+                return wm.getWalletQrCode(id);
+        }
+
+        // Create wallet entry request
+        @PostMapping("/{id}/addWalletEntryRequest")
+        @ResponseStatus(HttpStatus.CREATED)
+        public void addWalletEntryRequest(@PathVariable(value = "id") String id, @RequestBody UserDTO user) {
+                wm.addNewMemberRequest(
+                        user,
+                        id);
+        }
+
+        // Accept wallet entry request
+        @PostMapping("/{id}/acceptWalletEntryRequest")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public void acceptWalletEntryRequest(@PathVariable(value = "id") String id, @RequestBody WalletEntryRequest request) {
+                wm.acceptWalletEntryRequest(
+                        id, request);
+        }
+
+        // Reject wallet entry request
+        @PostMapping("/{id}/rejectWalletEntryRequest")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public void rejectWalletEntryRequest(@PathVariable(value = "id") String id, @RequestBody WalletEntryRequest request) {
+                wm.rejectWalletEntryRequest(
+                        id, request);
         }
 
 

@@ -7,9 +7,11 @@ import { Field, Form } from 'react-final-form'
 const WalletInfo = (props) => {
 
     const history = useHistory();
+    const [walletQrCode, setWalletQrCode] = useState();
     const [wallet, setWallet] = useState();
     const [error, setError] = useState([]);
     const [user, setUser] = useState();
+    const [seeRequestsClicked, setSeeRequestsClicked] = useState(false);
 
     const getLoggedInUser = async () => {
         const user = await axios.get("http://localhost:8080/user/me");
@@ -20,6 +22,18 @@ const WalletInfo = (props) => {
         try {
             const wallet = await Service.getWalletById(props.walletId);
             setWallet(wallet);
+        }
+        catch (err) {
+            setError(oldArray => [...oldArray,
+            err.message
+            ]);
+        }
+    }
+    const getWalletQrCode = async () => {
+        try {
+            const image = await Service.getWalletQrCode(props.walletId);
+            setWalletQrCode(image);
+            console.log(image);
         }
         catch (err) {
             setError(oldArray => [...oldArray,
@@ -40,16 +54,15 @@ const WalletInfo = (props) => {
                 ]);
             }
         }
-        //else{
-        // try {
-        //     await Service.leaveWallet(wallet.id,)
-        // }
-        // catch (err) {
-        //     setError(oldArray => [...oldArray,
-        //     err.message
-        //     ]);
-        // }
-        //}
+    }
+
+    function seeRequestsHandler() {
+        if (seeRequestsClicked) {
+            setSeeRequestsClicked(false);
+        } else {
+            setSeeRequestsClicked(true);
+
+        }
     }
 
     async function changeBudgetHandler(formValues) {
@@ -70,14 +83,39 @@ const WalletInfo = (props) => {
             }
         }
     }
+    
+    async function rejectEntryRequest(request) {
+            try {
+                await Service.rejectEntryRequest(wallet.id, request)
+            }
+            catch (err) {
+                setError(oldArray => [...oldArray,
+                err.message
+                ]);
+            }
+    }
+    async function acceptEntryRequest(request) {
+        try {
+            await Service.acceptEntryRequest(wallet.id, request)
+        }
+        catch (err) {
+            setError(oldArray => [...oldArray,
+            err.message
+            ]);
+        }
+}
+    function copyWalletCode() {
+        navigator.clipboard.writeText("http://localhost:3000/user/wallets/code/" + wallet.generatedCode.link);
+    }
 
     useEffect(() => {
         getCurrentWallet();
+        getWalletQrCode();
         getLoggedInUser();
 
     }, [])
 
-    if (!wallet) {
+    if (!wallet || !user) {
         return null;
     }
     return (
@@ -189,9 +227,48 @@ const WalletInfo = (props) => {
                                     <hr />
                                     <div className="row">
                                         <div className="col-lg-12">
-                                            <Link to="t" className="btn btn-primary">
-                                                Invite member
-                                            </Link>
+                                            <img src={walletQrCode} />
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-lg-12">
+                                            <button onClick={copyWalletCode} className="btn btn-primary">
+                                                Copy wallet code
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-lg-12">
+                                            <button onClick={seeRequestsHandler} className="btn btn-primary">
+                                                {seeRequestsClicked ? 'Hide Requests' : 'See requests'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row">
+                                        <div className="col-lg-12">
+                                            {seeRequestsClicked ?
+                                                wallet.walletEntryRequests.map(request => (
+                                                    <div className="row">
+                                                        <div className='col-md-4'>
+                                                            <h6>{request.user.firstName} {request.user.lastName}</h6>
+                                                        </div>
+                                                        <div className='col-md-4'>
+                                                            <button onClick={ () => acceptEntryRequest(request)} className="btn btn-primary">
+                                                                Accept
+                                                            </button>
+                                                        </div>
+                                                        <div className='col-md-4'>
+                                                            <button onClick={rejectEntryRequest} className="btn btn-danger">
+                                                                Reject
+                                                            </button>
+                                                        </div>
+                                                    <br></br>
+                                                    </div>))
+
+                                                : null}
                                         </div>
                                     </div>
 
