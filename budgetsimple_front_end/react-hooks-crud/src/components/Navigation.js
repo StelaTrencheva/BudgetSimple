@@ -16,7 +16,6 @@ const Navigation = () => {
                         <NavLink to="/">Dashboard</NavLink>
                         <NavLink to={`/user/wallets`}>Wallets</NavLink>
                         <NavLink to={`/user/account`}>Account</NavLink>
-                        <NavLink to="/">Contact</NavLink>
                         <NavLink to="/" onClick = {Service.logoutUser}>Logout</NavLink>
                     </Nav>
                 </Navbar.Collapse>

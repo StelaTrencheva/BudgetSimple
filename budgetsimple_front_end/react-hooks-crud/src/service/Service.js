@@ -197,6 +197,14 @@ export const deleteWallet = async (walletId) => {
         throw new Error(err.message)
     }
 }
+export const deleteTransaction = async (walletId,transactionId) => {
+    try {
+        const result = await axios.delete(`${URL}/wallet/${walletId}/transaction/${transactionId}/delete`);
+    }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
 
 export const changeWalletBudget = async (walletId, budget) => {
     try {
@@ -211,6 +219,15 @@ export const getTransactionCategories = async () => {
     try {
         const transactionCategories = await axios.get(`${URL}/wallet/transaction/categories`);
         return transactionCategories.data;
+    }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+export const getTransactionById = async (transactionId) => {
+    try {
+        const transaction = await axios.get(`${URL}/wallet/transaction/${transactionId}`);
+        return transaction.data;
     }
     catch (err) {
         throw new Error(err.message)

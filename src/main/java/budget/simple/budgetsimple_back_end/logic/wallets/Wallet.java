@@ -131,4 +131,7 @@ public class Wallet{
     public void removeEntryRequest(WalletEntryRequest request){
         this.walletEntryRequests.removeIf(request1 -> request.getId().equals(request1.getId()));
     }
+    public void removeTransaction(String transactionId){
+        this.transactions.removeIf(transaction1 -> transaction1.getId().equals(transactionId));
+    }
 }

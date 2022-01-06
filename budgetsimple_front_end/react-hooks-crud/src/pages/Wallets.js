@@ -51,40 +51,41 @@ const Wallets = () => {
                     <div className="alert alert-warning" role="alert">{error}</div>
                 </div>
             ))}
-                        {wallets.map(wallet => (
-                            <>
-                            <div className="card border border-dark">
-                                <div className="card-body flex">
-                                    <div className="row wallet-row">
-                                        <div className="col-lg-3">
-                                            <Link to = {{
-                                                pathname: `/user/wallets/${wallet.id}`,
-                                                state: wallet.id
-                                            }}><img className="smallLogo mx-auto d-block" src={logo} alt="logo" /></Link>                                        </div>
-                                        <div className="col-lg-3">
-                                            <h5>Title: {wallet.title}</h5>
-                                        </div>
-                                        <div className="col-lg-3">
-                                            <h5>Members: {wallet.members.length}</h5>
-                                        </div>
-                                        <div className="col-lg-3">
-                                            <h5>Spent amount: {getWalletTotalSpent(wallets)}</h5>
-                                        </div>
-                                    </div>
+            {wallets.map(wallet => (
+                <>
+                    <div className="card border border-dark">
+                        <div className="card-body flex">
+                            <div className="row wallet-row">
+                                <div className="col-lg-3">
+                                    <Link to={{
+                                        pathname: `/user/wallets/${wallet.id}`,
+                                        state: wallet.id
+                                    }}><img className="smallLogo mx-auto d-block" src={logo} alt="logo" /></Link>
+                                </div>
+                                <div className="col-lg-3">
+                                    <h5>Title: {wallet.title}</h5>
+                                </div>
+                                <div className="col-lg-3">
+                                    <h5>Members: {wallet.members.length}</h5>
+                                </div>
+                                <div className="col-lg-3">
+                                    <h5>Spent amount: {getWalletTotalSpent(wallets)}</h5>
                                 </div>
                             </div>
-                            <hr/>
-                            </>
-                        ))}
-                <hr/>
-                <div className="row">
-                    <div className="col-lg-12">
-                        <Link to="/user/addWallet" className="btn btn-primary">
-                            Add wallet
-                        </Link>
+                        </div>
                     </div>
+                    <hr />
+                </>
+            ))}
+            <hr />
+            <div className="row">
+                <div className="col-lg-12">
+                    <Link to="/user/addWallet" className="btn btn-primary">
+                        Add wallet
+                    </Link>
                 </div>
             </div>
+        </div>
 
     );
 }

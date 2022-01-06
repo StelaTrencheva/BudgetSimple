@@ -72,11 +72,25 @@ public class WalletsController {
                 wm.addTransaction(id, transactionDTO);
         }
 
+        // Get transaction by id
+        @GetMapping("/transaction/{transaction_id}")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Transaction getTransaction(@PathVariable(value = "transaction_id") String transaction_id) {
+                return wm.getTransactionById(transaction_id);
+        }
+
         // Get all transactions categories
         @GetMapping("/transaction/categories")
         @ResponseStatus(HttpStatus.ACCEPTED)
         public List<TransactionCategory> getAllTransactionCategories() {
                 return wm.getAllTransactionCategories();
+        }
+
+        // Delete transaction
+        @DeleteMapping("/{id}/transaction/{transaction_id}/delete")
+        @ResponseStatus(HttpStatus.OK)
+        public void deleteTransaction(@PathVariable(value = "id") String id, @PathVariable(value = "transaction_id") String transaction_id) throws IOException {
+                wm.deleteTransaction(id, transaction_id);
         }
 
         // Get wallet by code id
@@ -85,6 +99,8 @@ public class WalletsController {
         public Wallet getWalletByCode(@PathVariable(value = "code") String code) {
                 return wm.getWalletByCode(code);
         }
+
+
         // Get wallet qr code image
         @GetMapping("/qrCode/{id}")
         public @ResponseBody byte[] getWalletQrCodeImage(@PathVariable(value = "id") String id) throws IOException {

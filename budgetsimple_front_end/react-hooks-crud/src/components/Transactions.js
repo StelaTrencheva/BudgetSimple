@@ -8,6 +8,7 @@ import { Link, useHistory } from "react-router-dom";
 const Transactions = (props) => {
 
     const [transactions, setTransactions] = useState([]);
+    const [walletId, setWalletId] = useState();
     const [error, setError] = useState([]);
     const [addTransactionSelected, setAddTransactionSelected] = useState(false);
     const [hiddenButton, setHiddenButton] = useState(false);
@@ -20,6 +21,7 @@ const Transactions = (props) => {
     const getTransactions = async () => {
         try {
             const transactions = await Service.getTransactionsByWalletId(props.walletId);
+            setWalletId(props.walletId);
             setTransactions(transactions);
         }
         catch (err) {
@@ -46,7 +48,7 @@ const Transactions = (props) => {
                 addTransactionSelected ? (
                     <AddTransaction showAddButton={setHiddenButton} changeViewStatus={setAddTransactionSelected} walletId={props.walletId}></AddTransaction>
                 ) : (
-                    <AllTransactions transactions={transactions}></AllTransactions>
+                    <AllTransactions transactions={transactions} walletId={walletId}></AllTransactions>
                 )
             }
             {hiddenButton ?

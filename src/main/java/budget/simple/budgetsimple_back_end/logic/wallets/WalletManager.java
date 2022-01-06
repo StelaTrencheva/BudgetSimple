@@ -112,4 +112,15 @@ public class WalletManager {
         Wallet wallet = this.getWalletById(wallet_id);
         return Base64.getEncoder().encode(readFileToByteArray(new File(wallet.getGeneratedCode().getPath() + wallet.getGeneratedCode().getCodeId() + ".png")));
     }
+
+    public void deleteTransaction(String walletId, String transactionId) {
+        Wallet wallet = this.getWalletById(walletId);
+        wallet.removeTransaction(transactionId);
+        walletData.save(wallet);
+        transactionData.deleteById(transactionId);
+    }
+
+    public Transaction getTransactionById(String transactionId) {
+        return transactionData.findById(transactionId).orElse(null);
+    }
 }

@@ -7,7 +7,9 @@ import SignUp from "./pages/SignUp";
 import Account from "./pages/Account";
 import Wallets from "./pages/Wallets";
 import AddWallet from './pages/AddWallet';
+
 import Wallet from './pages/Wallet';
+import Transaction from './pages/Transaction';
 import EnterWallet from './pages/EnterWallet';
 import axios from "axios";
 import Navigation from './components/Navigation';
@@ -31,6 +33,7 @@ ReactDOM.render(
                     <Route exact path="/user/addWallet" component={AddWallet} />
                     <Route exact path="/user/wallets/:id" component={Wallet} />
                     <Route exact path="/user/wallets/code/:id" component={EnterWallet} />
+                    <Route exact path="/user/wallets/:walletId/transaction/:transactionId" component={Transaction} />
                     <Route path="*">
                       <Redirect to="/sign-in" />
                     </Route>
