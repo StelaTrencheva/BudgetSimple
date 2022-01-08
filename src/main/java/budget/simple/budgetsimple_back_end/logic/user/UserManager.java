@@ -2,6 +2,7 @@ package budget.simple.budgetsimple_back_end.logic.user;
 
 import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.logic.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import budget.simple.budgetsimple_back_end.repository.IUsersData;
@@ -15,6 +16,7 @@ public class UserManager {
     private final IUsersData usersData;
     private final UserMapper userMapper;
 
+    @Autowired
     public UserManager(IUsersData usersData, UserMapper userMapper) {
         this.usersData = usersData;
         this.userMapper = userMapper;

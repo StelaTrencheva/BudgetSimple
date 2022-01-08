@@ -16,6 +16,8 @@ const WalletInfo = (props) => {
     const getLoggedInUser = async () => {
         const user = await axios.get("http://localhost:8080/user/me");
         setUser(user.data);
+        Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
+        
     };
 
     const getCurrentWallet = async () => {
@@ -33,7 +35,6 @@ const WalletInfo = (props) => {
         try {
             const image = await Service.getWalletQrCode(props.walletId);
             setWalletQrCode(image);
-            console.log(image);
         }
         catch (err) {
             setError(oldArray => [...oldArray,
@@ -61,8 +62,8 @@ const WalletInfo = (props) => {
             setSeeRequestsClicked(false);
         } else {
             setSeeRequestsClicked(true);
-
         }
+        
     }
 
     async function changeBudgetHandler(formValues) {
@@ -83,16 +84,16 @@ const WalletInfo = (props) => {
             }
         }
     }
-    
+
     async function rejectEntryRequest(request) {
-            try {
-                await Service.rejectEntryRequest(wallet.id, request)
-            }
-            catch (err) {
-                setError(oldArray => [...oldArray,
-                err.message
-                ]);
-            }
+        try {
+            await Service.rejectEntryRequest(wallet.id, request)
+        }
+        catch (err) {
+            setError(oldArray => [...oldArray,
+            err.message
+            ]);
+        }
     }
     async function acceptEntryRequest(request) {
         try {
@@ -103,7 +104,7 @@ const WalletInfo = (props) => {
             err.message
             ]);
         }
-}
+    }
     function copyWalletCode() {
         navigator.clipboard.writeText("http://localhost:3000/user/wallets/code/" + wallet.generatedCode.link);
     }
@@ -112,6 +113,7 @@ const WalletInfo = (props) => {
         getCurrentWallet();
         getWalletQrCode();
         getLoggedInUser();
+        
 
     }, [])
 
@@ -256,7 +258,7 @@ const WalletInfo = (props) => {
                                                             <h6>{request.user.firstName} {request.user.lastName}</h6>
                                                         </div>
                                                         <div className='col-md-4'>
-                                                            <button onClick={ () => acceptEntryRequest(request)} className="btn btn-primary">
+                                                            <button onClick={() => acceptEntryRequest(request)} className="btn btn-primary">
                                                                 Accept
                                                             </button>
                                                         </div>
@@ -265,7 +267,7 @@ const WalletInfo = (props) => {
                                                                 Reject
                                                             </button>
                                                         </div>
-                                                    <br></br>
+                                                        <br></br>
                                                     </div>))
 
                                                 : null}

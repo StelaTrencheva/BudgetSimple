@@ -46,6 +46,10 @@ dependencies {
     implementation 'com.google.zxing:javase:3.4.0'
     implementation 'commons-io:commons-io:2.6'
     implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'org.webjars:webjars-locator-core:0.48'
+    implementation 'org.webjars:sockjs-client:1.5.1'
+    implementation 'org.webjars:stomp-websocket:2.3.4'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.2'
 
 }
 
@@ -57,7 +61,7 @@ sonarqube {
     properties {
         property "sonar.projectKey", "BudgetSimple"
         property "sonar.host.url", "http://localhost:9000"
-        property "sonar.login", "a602644a5a5515acb8841cd18e6fe49f683c2b2d"
+        property "sonar.login", "e28b43431bd3a3aebcebd91079e515373220cc90"
     }
 }
 //bootBuildImage {

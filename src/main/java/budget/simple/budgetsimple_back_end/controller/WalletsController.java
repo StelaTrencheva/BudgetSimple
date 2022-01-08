@@ -1,6 +1,7 @@
 package budget.simple.budgetsimple_back_end.controller;
 
 import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.logic.user.UserManager;
 import budget.simple.budgetsimple_back_end.logic.wallets.*;
 import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.TransactionDTO;
@@ -19,8 +20,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/wallet")
 public class WalletsController {
+        private final WalletManager wm;
+
         @Autowired
-        private WalletManager wm;
+        public WalletsController(WalletManager wm){
+                this.wm = wm;
+        }
 
         // Get all wallets
         @PostMapping("/getAll")

@@ -1,6 +1,12 @@
 import axios from "axios";
 import { useHistory } from "react-router";
+
+import SockJS from 'sockjs-client';
+import Stomp from 'stompjs';
+
 const URL = "http://localhost:8080";
+let socket = null;
+
 
 export const logInUser = async (username, password) => {
     try {
@@ -231,6 +237,23 @@ export const getTransactionById = async (transactionId) => {
     }
     catch (err) {
         throw new Error(err.message)
+    }
+}
+
+export const connectWebsocket = function (subscribtion) {
+    const ENDPOINT = `${URL}/websocket`;
+    socket = SockJS(ENDPOINT);
+    const stompClient = Stomp.over(socket);
+    stompClient.connect({}, () => {
+      stompClient.subscribe(subscribtion, (data) => {
+        alert(JSON.parse(data.body).content);
+      });
+    });
+}
+export const disconnectWebsocket = function () {
+    if (socket != null) {
+        socket.close();
+        socket = null;
     }
 }
 

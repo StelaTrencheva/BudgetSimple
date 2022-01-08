@@ -39,29 +39,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override protected void configure(HttpSecurity http) throws Exception {
         JWTAuthenticationFilter customFilter = new JWTAuthenticationFilter(authenticationManager());
         customFilter.setFilterProcessesUrl("/user/login");
-                http.
-                        cors()
-                        .and()
-                        .csrf().disable().authorizeRequests()
-                        .antMatchers(HttpMethod.POST, AuthenticationConfigConstants.SIGN_UP_URL).permitAll()
-                        .antMatchers("/user/login").permitAll()
-                        .antMatchers("/wallet/**").permitAll()
-                        .antMatchers("/survey/**").permitAll()
-                        .antMatchers("/surveySubmission/**").permitAll()
-                        .antMatchers("/user/createUser").permitAll()
-                        //.antMatchers("/user").hasAnyAuthority("ADMIN")
-                        .antMatchers("/user").permitAll()
-                        .antMatchers("/user/updateUser").hasAnyAuthority("USER","ADMIN")
-                        .antMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
-                        .anyRequest().authenticated()
-                        .and()
-                        .addFilter(customFilter)
-                        .addFilter(new JWTAuthorizationFilter(authenticationManager()))
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .and()
-                        .logout()
-                        .deleteCookies("auth")
-                        .logoutUrl("/user/logout");
+        http.
+                cors()
+                .and()
+                .csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST, AuthenticationConfigConstants.SIGN_UP_URL).permitAll()
+                .antMatchers("/user/login").permitAll()
+                .antMatchers("/websocket/**").permitAll()
+                .antMatchers("/wallet/**").permitAll()
+                .antMatchers("/survey/**").permitAll()
+                .antMatchers("/surveySubmission/**").permitAll()
+                .antMatchers("/user/createUser").permitAll()
+                //.antMatchers("/user").hasAnyAuthority("ADMIN")
+                .antMatchers("/user").permitAll()
+                .antMatchers("/user/updateUser").hasAnyAuthority("USER","ADMIN")
+                .antMatchers("/user/**").hasAnyAuthority("USER","ADMIN")
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(customFilter)
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .logout()
+                .deleteCookies("auth")
+                .logoutUrl("/user/logout");
+
     }
 
     @Override

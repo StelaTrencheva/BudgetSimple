@@ -16,6 +16,7 @@ const Account = () => {
         const user = await axios.get("http://localhost:8080/user/me");
         setUser(user.data);
         setUsername(user.data.username);
+        Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
     };
 
     const updateUser = async () => {

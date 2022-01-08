@@ -16,8 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UsersController {
+    private final UserManager um;
+
     @Autowired
-    private UserManager um;
+    public UsersController(UserManager um){
+        this.um = um;
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<User> getUserPath(@PathVariable(value = "id") String id) {
@@ -38,9 +42,8 @@ public class UsersController {
 
     @PostMapping("/createUser")
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody UserDTO user) {
+    public void createUser(@RequestBody UserDTO user) {
         um.addUser(user);
-        return um.getUser(user.getUsername());
     }
 
 

@@ -15,6 +15,7 @@ const AddTransaction = (props) => {
     const getLoggedInUser = async () => {
         const user = await axios.get("http://localhost:8080/user/me");
         setUser(user.data);
+        Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
     };
 
     const getCurrentWallet = async () => {
@@ -78,7 +79,7 @@ const AddTransaction = (props) => {
                         props.changeViewStatus(false);
                         props.showAddButton(false);
                         wallet.members.map(member => {
-                            memberAmounts.push(...memberAmounts,
+                            memberAmounts.push(
                                 {
                                     'user': member,
                                     'amount': formValues["split_amount_" + member.username]

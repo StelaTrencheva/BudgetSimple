@@ -20,6 +20,7 @@ const SignUp = () => {
     const logInUser = async () => {
         try {
             await Service.logInUser(username, password);
+            Service.connectWebsocket(`/walletEntry/messages/${username}`);
         } catch (err) {
             setError(currentErrors => [...currentErrors, err]);
         }
@@ -27,7 +28,7 @@ const SignUp = () => {
        const createUser = async () => {
         try{
             await Service.createUser(firstName, lastName, email, address, phoneNum, dateOfBirth, username, "USER", password)
-            logInUser(username, password);
+            logInUser();
         }
         catch(err){
             setError(oldArray => [...oldArray,

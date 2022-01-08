@@ -15,6 +15,7 @@ const AddWallet = () => {
         try {
             const user = await axios.get("http://localhost:8080/user/me");
             setUser(user.data);
+            Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
         } catch (err) {
             setError(oldArray => [...oldArray,
             err.message

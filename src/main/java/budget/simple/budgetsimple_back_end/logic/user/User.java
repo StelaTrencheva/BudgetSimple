@@ -154,7 +154,7 @@ public class User {
         this.firstWorkingDay=userWorkingInfo.getFirstWorkingDay();
         this.hourlyWage=userWorkingInfo.getHourlyWage();
     }
-    protected User() {
+    public User() {
 
     }
 

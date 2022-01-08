@@ -4,6 +4,7 @@ import budget.simple.budgetsimple_back_end.logic.mapper.TransactionMapper;
 import budget.simple.budgetsimple_back_end.logic.mapper.UserMapper;
 import budget.simple.budgetsimple_back_end.logic.mapper.WalletMapper;
 import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.WebsocketMessage;
 import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.TransactionDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.WalletDTO;
@@ -13,6 +14,7 @@ import budget.simple.budgetsimple_back_end.repository.IPersistentWalletData;
 import com.google.zxing.WriterException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,21 +30,23 @@ import static org.apache.commons.io.FileUtils.readFileToByteArray;
 
 @Service
 public class WalletManager {
-    @Autowired
-    private ImageManager im;
-
+    private final ImageManager im;
+    private final SimpMessagingTemplate messagingTemplate;
     private final IPersistentWalletData walletData;
     private final IPersistentTransactionData transactionData;
     private final IPersistentSharableCodeData generatedCodesData;
     private final WalletMapper walletMapper;
     private final TransactionMapper transactionMapper;
 
-    public WalletManager(IPersistentTransactionData transactionData, IPersistentSharableCodeData generatedCodes, IPersistentWalletData walletData, WalletMapper walletMapper, TransactionMapper transactionMapper) {
+    @Autowired
+    public WalletManager(SimpMessagingTemplate messagingTemplate,ImageManager im, IPersistentTransactionData transactionData, IPersistentSharableCodeData generatedCodes, IPersistentWalletData walletData, WalletMapper walletMapper, TransactionMapper transactionMapper) {
         this.transactionData = transactionData;
         this.generatedCodesData = generatedCodes;
         this.walletData = walletData;
         this.walletMapper = walletMapper;
         this.transactionMapper = transactionMapper;
+        this.im = im;
+        this.messagingTemplate = messagingTemplate;
     }
 
     public List<Wallet> getAllWallets(User user){
@@ -99,10 +103,15 @@ public class WalletManager {
     }
     public void acceptWalletEntryRequest(String walletId, WalletEntryRequest request) {
         Wallet wallet = getWalletById(walletId);
+        for (User user: wallet.getMembers()) {
+            this.notifyWalletMembersOfNewMember(user.getUsername(), new WebsocketMessage(String.format("New member with name: "+request.getUser().getFirstName()+" "+
+                    request.getUser().getLastName() + " was added to the wallet " + wallet.getTitle())));
+        }
+
         wallet.addMember(request.getUser());
         wallet.removeEntryRequest(request);
         walletData.save(wallet);
-    }
+        }
     public void rejectWalletEntryRequest(String walletId, WalletEntryRequest request) {
         Wallet wallet = getWalletById(walletId);
         wallet.removeEntryRequest(request);
@@ -122,5 +131,9 @@ public class WalletManager {
 
     public Transaction getTransactionById(String transactionId) {
         return transactionData.findById(transactionId).orElse(null);
+    }
+
+    public void notifyWalletMembersOfNewMember(String username,final WebsocketMessage message){
+        messagingTemplate.convertAndSend("/walletEntry/messages/" + username, message);
     }
 }

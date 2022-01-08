@@ -21,6 +21,7 @@ const Transaction = (props) => {
     const getLoggedInUser = async () => {
         const user = await axios.get("http://localhost:8080/user/me");
         setUser(user.data);
+        Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
     };
     const getCurrentTransaction = async () => {
         try {

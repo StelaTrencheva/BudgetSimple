@@ -37,6 +37,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private String extractCookie(HttpServletRequest req, String cookieName) {
+        if(req.getCookies() == null){
+            return null;
+        }
         for (Cookie c : req.getCookies()) {
             if (c.getName().equals(cookieName))
                 return c.getValue();

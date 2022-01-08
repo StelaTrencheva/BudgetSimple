@@ -3,6 +3,7 @@ import logo from "../images/logo.png"
 import {Link, useHistory} from "react-router-dom";
 import * as Service from '../service/Service'
 
+
 const Login = () => {
             const history = useHistory();
             const [username,setUsername] = useState(null);
@@ -11,21 +12,24 @@ const Login = () => {
             const logInUser = async () => {
                 try {
                     await Service.logInUser(username, password);
-                    console.log(localStorage.getItem("redirect_path"))
+                    Service.connectWebsocket(`/walletEntry/messages/${username}`);
                     if (localStorage.getItem("redirect_path") === null) {
                         history.push("/user/account");
+                    
                     }else{
                         let redirect_path = localStorage.getItem("redirect_path");
                         localStorage.removeItem("redirect_path");
                         history.push(redirect_path);
                     }
+                    
                 } catch (err) {
                     setError(currentErrors => [...currentErrors, err.message]);
                 }
             }
 
             useEffect(() => {
-                Service.logoutUser()
+                Service.logoutUser();
+                Service.disconnectWebsocket();
                 if (localStorage.getItem("redirect_path") != null) {
                     setError(currentErrors => [...currentErrors,"You need to login in order to enter a wallet!"]);
                 }
@@ -40,6 +44,7 @@ const Login = () => {
                      ]);
                 }else{
                 logInUser();
+
             }}
 
         return (

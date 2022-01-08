@@ -7,9 +7,9 @@ import Field from "../components/Field"
 import * as Service from '../service/Service'
 import AddWallet from "../pages/AddWallet"
 
-function getWalletTotalSpent(wallets) {
+function getWalletTotalSpent(wallet) {
     let totalSpent = 0;
-    wallets.map(wallet => wallet.transactions.map(transaction => totalSpent += transaction.amount));
+    wallet.transactions.map(transaction => totalSpent += transaction.amount);
     return totalSpent;
 }
 const Wallets = () => {
@@ -21,7 +21,7 @@ const Wallets = () => {
     const getUserAndWallets = async () => {
         try {
             const loggedInUser = await axios.get("http://localhost:8080/user/me");
-            console.log(loggedInUser.data);
+            Service.connectWebsocket(`/walletEntry/messages/${loggedInUser.data.username}`);
             const foundWallets = await axios.post("http://localhost:8080/wallet/getAll",
                 loggedInUser.data
             );
@@ -69,7 +69,7 @@ const Wallets = () => {
                                     <h5>Members: {wallet.members.length}</h5>
                                 </div>
                                 <div className="col-lg-3">
-                                    <h5>Spent amount: {getWalletTotalSpent(wallets)}</h5>
+                                    <h5>Spent amount: {getWalletTotalSpent(wallet)}</h5>
                                 </div>
                             </div>
                         </div>
