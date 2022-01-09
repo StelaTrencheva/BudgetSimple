@@ -1,20 +1,17 @@
 package budget.simple.budgetsimple_back_end.controller;
 
 import budget.simple.budgetsimple_back_end.logic.user.User;
-import budget.simple.budgetsimple_back_end.logic.user.UserManager;
 import budget.simple.budgetsimple_back_end.logic.wallets.*;
 import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.TransactionDTO;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.WalletDTO;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -136,8 +133,44 @@ public class WalletsController {
                 wm.rejectWalletEntryRequest(
                         id, request);
         }
+        // Remove wallet member
+        @PostMapping("/{id}/removeWalletMember")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public void removeWalletMember(@PathVariable(value = "id") String id, @RequestBody UserDTO member) {
+                wm.removeWalletMember(
+                        id, member);
+        }
 
+        // Get wallet spending per member
+        @GetMapping("/{id}/spendingPerMember")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Map<String, Double> getWalletSpendingPerMember(@PathVariable(value = "id") String id) {
+                return wm.getWalletSpendingPerMember(
+                        id);
+        }
 
+        // Get wallet spending per category
+        @GetMapping("/{id}/spendingPerCategory")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Map<TransactionCategory, Double> getWalletSpendingPerCategory(@PathVariable(value = "id") String id) {
+                return wm.getWalletSpendingPerCategory(
+                        id);
+        }
 
+        // Get wallet total spent
+        @GetMapping("/{id}/totalSpent")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Double getWalletTotalSpend(@PathVariable(value = "id") String id) {
+                return wm.getWalletTotalSpend(
+                        id);
+        }
+
+        // Get spending of all wallets
+        @GetMapping("/totalSpent")
+        @ResponseStatus(HttpStatus.ACCEPTED)
+        public Double getSpendingOfAllWallets(@RequestBody User user) {
+                return wm.getAllWalletsSpending(
+                        user);
+        }
 }
 

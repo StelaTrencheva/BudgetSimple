@@ -1,6 +1,7 @@
 package budget.simple.budgetsimple_back_end.logic.wallets;
 
 import budget.simple.budgetsimple_back_end.logic.user.User;
+import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import com.google.zxing.WriterException;
 import lombok.Getter;
 import lombok.Setter;
@@ -133,5 +134,9 @@ public class Wallet{
     }
     public void removeTransaction(String transactionId){
         this.transactions.removeIf(transaction1 -> transaction1.getId().equals(transactionId));
+    }
+
+    public void removeMember(User user) {
+        this.members.removeIf(user1 -> user.getId().equals(user1.getId()));
     }
 }

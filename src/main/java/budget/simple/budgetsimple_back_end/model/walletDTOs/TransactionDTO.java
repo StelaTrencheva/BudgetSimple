@@ -16,7 +16,6 @@ public class TransactionDTO {
     @Getter @Setter private String title;
     @Getter @Setter private String description;
     @Getter @Setter private String category;
-    @Getter @Setter private Date dataOfCreation;
     @Getter @Setter private List<MemberAmountDTO> memberAmountDTO;
     @Getter @Setter private MultipartFile image;
 }

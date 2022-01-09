@@ -16,4 +16,5 @@ import java.util.List;
 public interface IPersistentWalletData extends JpaRepository<Wallet, String> {
     List<Wallet> findAllByMembersContains(User user);
     Wallet findWalletByGeneratedCode(ISharableCode code);
+
 }

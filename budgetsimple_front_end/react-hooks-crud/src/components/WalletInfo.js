@@ -17,7 +17,7 @@ const WalletInfo = (props) => {
         const user = await axios.get("http://localhost:8080/user/me");
         setUser(user.data);
         Service.connectWebsocket(`/walletEntry/messages/${user.data.username}`);
-        
+
     };
 
     const getCurrentWallet = async () => {
@@ -54,6 +54,16 @@ const WalletInfo = (props) => {
                 err.message
                 ]);
             }
+        } else {
+            try {
+                await Service.leaveWallet(wallet.id, user);
+                history.push("/user/wallets");
+            }
+            catch (err) {
+                setError(oldArray => [...oldArray,
+                err.message
+                ]);
+            }
         }
     }
 
@@ -63,7 +73,7 @@ const WalletInfo = (props) => {
         } else {
             setSeeRequestsClicked(true);
         }
-        
+
     }
 
     async function changeBudgetHandler(formValues) {
@@ -113,7 +123,7 @@ const WalletInfo = (props) => {
         getCurrentWallet();
         getWalletQrCode();
         getLoggedInUser();
-        
+
 
     }, [])
 
@@ -121,172 +131,176 @@ const WalletInfo = (props) => {
         return null;
     }
     return (
-        <div className="row">
-            {error.map(error => (
-                <div className="form-group form-margin">
-                    <div className="alert alert-warning" role="alert">{error}</div>
-                </div>
-            ))}
 
-            <div className="card border">
-                <div className="card-body flex">
-                    <div className="row wallet-row">
-                        <div className="col-lg-6">
-                            <div className="card border border-dark">
-                                <div className="card-body flex">
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Title: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.title}</p>
-                                        </div>
-                                    </div>
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Description: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.description}</p>
-                                        </div>
-                                    </div>
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Budget: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.budget}</p>
-                                        </div>
-                                    </div>
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Currency: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.currency}</p>
-                                        </div>
-                                    </div>
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Date of creation: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.dateOfCreation} k</p>
-                                        </div>
-                                    </div>
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Number of transactions: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.transactions.length}</p>
-                                        </div>
-                                    </div>
-                                    <Form
-                                        onSubmit={changeBudgetHandler}
-                                    >
-                                        {({ handleSubmit }) => (
-                                            <form onSubmit={handleSubmit}>
-                                                <div className="row wallet-row">
-                                                    <Field name="newBudget">
-                                                        {props => (
-                                                            <div className="form-group col-md-6">
-                                                                <input {...props.input} type="text" className="form-control" id="newBudget" placeholder="New budget" />
-                                                            </div>
-                                                        )}
-                                                    </Field>
-                                                    <div className='col-md-6'>
-                                                        <button type="submit" className="btn btn-primary">
-                                                            Change budget
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        )}
-                                    </Form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <div className="card border border-dark">
-                                <div className="card-body flex">
-                                    <div className="row wallet-row">
-                                        <div className='col-md-6'>
-                                            <h6>Members: </h6>
-                                        </div>
-                                        <div className='col-md-6'>
-                                            <p>{wallet.members.length}</p>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                    {wallet.members.map(member => (
+
+        <div className="card mdb-color lighten-2 text-center z-depth-2">
+            <div className="row">
+                {error.map(error => (
+                    <div className="form-group form-margin">
+                        <div className="alert alert-warning" role="alert">{error}</div>
+                    </div>
+                ))}
+
+                <div className="card border">
+                    <div className="card-body flex">
+                        <div className="row wallet-row">
+                            <div className="col-lg-6">
+                                <div className="card border border-dark">
+                                    <div className="card-body flex">
                                         <div className="row wallet-row">
-                                            <div className='col-md-12'>
-                                                <h6>{member.firstName} {member.lastName}</h6>
+                                            <div className='col-md-6'>
+                                                <h6>Title: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.title}</p>
                                             </div>
                                         </div>
-                                    ))}
-                                    <hr />
-                                    <div className="row">
-                                        <div className="col-lg-12">
-                                            <img src={walletQrCode} />
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Description: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.description}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <hr />
-                                    <div className="row">
-                                        <div className="col-lg-12">
-                                            <button onClick={copyWalletCode} className="btn btn-primary">
-                                                Copy wallet code
-                                            </button>
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Budget: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.budget}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <hr />
-                                    <div className="row">
-                                        <div className="col-lg-12">
-                                            <button onClick={seeRequestsHandler} className="btn btn-primary">
-                                                {seeRequestsClicked ? 'Hide Requests' : 'See requests'}
-                                            </button>
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Currency: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.currency}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <hr />
-                                    <div className="row">
-                                        <div className="col-lg-12">
-                                            {seeRequestsClicked ?
-                                                wallet.walletEntryRequests.map(request => (
-                                                    <div className="row">
-                                                        <div className='col-md-4'>
-                                                            <h6>{request.user.firstName} {request.user.lastName}</h6>
-                                                        </div>
-                                                        <div className='col-md-4'>
-                                                            <button onClick={() => acceptEntryRequest(request)} className="btn btn-primary">
-                                                                Accept
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Date of creation: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.dateOfCreation} k</p>
+                                            </div>
+                                        </div>
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Number of transactions: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.transactions.length}</p>
+                                            </div>
+                                        </div>
+                                        <Form
+                                            onSubmit={changeBudgetHandler}
+                                        >
+                                            {({ handleSubmit }) => (
+                                                <form onSubmit={handleSubmit}>
+                                                    <div className="row wallet-row">
+                                                        <Field name="newBudget">
+                                                            {props => (
+                                                                <div className="form-group col-md-6">
+                                                                    <input {...props.input} type="text" className="form-control" id="newBudget" placeholder="New budget" />
+                                                                </div>
+                                                            )}
+                                                        </Field>
+                                                        <div className='col-md-6'>
+                                                            <button type="submit" className="btn btn-primary">
+                                                                Change budget
                                                             </button>
                                                         </div>
-                                                        <div className='col-md-4'>
-                                                            <button onClick={rejectEntryRequest} className="btn btn-danger">
-                                                                Reject
-                                                            </button>
-                                                        </div>
-                                                        <br></br>
-                                                    </div>))
-
-                                                : null}
-                                        </div>
+                                                    </div>
+                                                </form>
+                                            )}
+                                        </Form>
                                     </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-6">
+                                <div className="card border border-dark">
+                                    <div className="card-body flex">
+                                        <div className="row wallet-row">
+                                            <div className='col-md-6'>
+                                                <h6>Members: </h6>
+                                            </div>
+                                            <div className='col-md-6'>
+                                                <p>{wallet.members.length}</p>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        {wallet.members.map(member => (
+                                            <div className="row wallet-row">
+                                                <div className='col-md-12'>
+                                                    <h6>{member.firstName} {member.lastName}</h6>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <img src={walletQrCode} />
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <button onClick={copyWalletCode} className="btn btn-primary">
+                                                    Copy wallet code
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                <button onClick={seeRequestsHandler} className="btn btn-primary">
+                                                    {seeRequestsClicked ? 'Hide Requests' : 'See requests'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                                {seeRequestsClicked ?
+                                                    wallet.walletEntryRequests.map(request => (
+                                                        <div className="row">
+                                                            <div className='col-md-4'>
+                                                                <h6>{request.user.firstName} {request.user.lastName}</h6>
+                                                            </div>
+                                                            <div className='col-md-4'>
+                                                                <button onClick={() => acceptEntryRequest(request)} className="btn btn-primary">
+                                                                    Accept
+                                                                </button>
+                                                            </div>
+                                                            <div className='col-md-4'>
+                                                                <button onClick={rejectEntryRequest} className="btn btn-danger">
+                                                                    Reject
+                                                                </button>
+                                                            </div>
+                                                            <br></br>
+                                                        </div>))
 
+                                                    : null}
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <br />
-            < hr />
-            <div className="row">
-                <div className="col-lg-12">
-                    <button onClick={deleteWalletHandler} className="btn btn-primary">
-                        {(wallet.creator.id == user.id) ? 'Delete wallet' : 'Leave wallet'}
-                    </button>
+                <br />
+                < hr />
+                <div className="row">
+                    <div className="col-lg-12">
+                        <button onClick={deleteWalletHandler} className="btn btn-primary">
+                            {(wallet.creator.id == user.id) ? 'Delete wallet' : 'Leave wallet'}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

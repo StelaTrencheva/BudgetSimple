@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -41,7 +42,7 @@ public class TransactionMapper {
                 transactionDTO.getDescription(),
                 TransactionCategory.valueOf(transactionDTO.getCategory()),
                 transactionDTO.getAmount(),
-                transactionDTO.getDataOfCreation(),
+                new Date(),
                 transactionDTO.getCreator(),
                 memberAmounts
         );
@@ -53,7 +54,6 @@ public class TransactionMapper {
         walletDTO.setCurrency(wallet.getCurrency());
         walletDTO.setDescription(wallet.getDescription());
         walletDTO.setTitle(wallet.getTitle());
-        walletDTO.setDataOfCreation(wallet.getDataOfCreation());
         return walletDTO;
     }
 }

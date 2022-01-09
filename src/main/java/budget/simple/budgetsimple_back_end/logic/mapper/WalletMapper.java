@@ -4,6 +4,8 @@ import budget.simple.budgetsimple_back_end.logic.wallets.Wallet;
 import budget.simple.budgetsimple_back_end.model.walletDTOs.WalletDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class WalletMapper {
 
@@ -17,7 +19,7 @@ public class WalletMapper {
                 walletDTO.getTitle(),
                 walletDTO.getDescription(),
                 walletDTO.getCurrency(),
-                walletDTO.getDataOfCreation()
+                new Date()
         );
     }
     public WalletDTO mapToDTO(Wallet wallet) {
@@ -26,7 +28,6 @@ public class WalletMapper {
         walletDTO.setCurrency(wallet.getCurrency());
         walletDTO.setDescription(wallet.getDescription());
         walletDTO.setTitle(wallet.getTitle());
-        walletDTO.setDataOfCreation(wallet.getDataOfCreation());
         return walletDTO;
     }
 }

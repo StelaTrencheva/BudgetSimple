@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useHistory } from "react-router";
 
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
@@ -67,7 +66,7 @@ export const updateUser = async (id, firstName, lastName, email, address, phoneN
     }
 }
 
-export const createWallet = async (creator, budget, title, description, currency, dateOfCreation) => {
+export const createWallet = async (creator, budget, title, description, currency) => {
     try {
         const wallet = await axios.post(`${URL}/wallet/create`,
             {
@@ -75,8 +74,7 @@ export const createWallet = async (creator, budget, title, description, currency
                 budget,
                 title,
                 description,
-                currency,
-                dateOfCreation
+                currency
 
             });
     }
@@ -85,8 +83,9 @@ export const createWallet = async (creator, budget, title, description, currency
     }
 }
 
-export const createTransaction = async (walletId, creator, amount, title, description, category, dateOfCreation, memberAmountDTO) => {
+export const createTransaction = async (walletId, creator, amount, title, description, category, memberAmountDTO) => {
     try {
+        var date = Date;
         const transaction = await axios.post(`${URL}/wallet/${walletId}/transaction/create`,
             {
                 walletId,
@@ -95,7 +94,6 @@ export const createTransaction = async (walletId, creator, amount, title, descri
                 title,
                 description,
                 category,
-                dateOfCreation,
                 memberAmountDTO
 
             });
@@ -178,7 +176,6 @@ export const getWalletQrCode = async (walletId) => {
     try {
         const walletQrCode = await axios.get(`${URL}/wallet/qrCode/${walletId}`);
         return `data:image/png;base64,${walletQrCode.data}`
-        return walletQrCode;
     }
     catch (err) {
         throw new Error(err.message)
@@ -203,9 +200,32 @@ export const deleteWallet = async (walletId) => {
         throw new Error(err.message)
     }
 }
+
+export const leaveWallet = async (walletId, user) => {
+    try {
+        const result = await axios.post(`${URL}/wallet/${walletId}/removeWalletMember`,{
+            
+            "address": user.address,
+            "dateOfBirth": user.dateOfBirth,
+            "email": user.email,
+            "firstName": user.firstName,
+            "id": user.id,
+            "lastName": user.lastName,
+            "password": user.password,
+            "phoneNum": user.phoneNum,
+            "role": user.role,
+            "username": user.username
+        }
+        );
+    }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+
 export const deleteTransaction = async (walletId,transactionId) => {
     try {
-        const result = await axios.delete(`${URL}/wallet/${walletId}/transaction/${transactionId}/delete`);
+         await axios.delete(`${URL}/wallet/${walletId}/transaction/${transactionId}/delete`);
     }
     catch (err) {
         throw new Error(err.message)
@@ -236,6 +256,88 @@ export const getTransactionById = async (transactionId) => {
         return transaction.data;
     }
     catch (err) {
+        throw new Error(err.message)
+    }
+}
+
+export const getSpendingPerMember = async (walletId) => {
+    try {
+        const data = await axios.get(`${URL}/wallet/${walletId}/spendingPerMember`);
+        return data.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+
+export const getSpendingPerCategory = async (walletId) => {
+    try {
+        const data = await axios.get(`${URL}/wallet/${walletId}/spendingPerCategory`);
+        return data.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+export const getTotalSpendInAccount = async (user) => {
+    try {
+        const data = await axios.get(`${URL}/wallet/totalSpent`,
+        user
+        );
+        return data.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+
+export const getSurveyByTitle = async (title) => {
+    try {
+        const survey = await axios.get(`${URL}/survey/getByTitle/${title}`);
+        return survey.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+export const getAllSubmissions = async () => {
+    try {
+        const submission = await axios.get(`${URL}/survey/submission/getAll`);
+        return submission.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+export const getCurrentSubmission = async (submissionId) => {
+    try {
+        const submission = await axios.get(`${URL}/survey/submission/${submissionId}`);
+        return submission.data;
+        }
+    catch (err) {
+        throw new Error(err.message)
+    }
+}
+export const createSurvey = async (title, questions) => {
+    try{
+        const survey = await axios.post(`${URL}/survey/create`,
+        {
+            title,
+            questions
+        })
+    }catch(err){
+        throw new Error(err.message)
+    }
+}
+export const createSurveySubmission = async (rating, surveyDTO, surveyAnswers) => {
+    try{
+        const submission = await axios.post(`${URL}/survey/submission/create`,
+        {
+            rating,
+            surveyDTO,
+            surveyAnswers
+        })
+    }catch(err){
         throw new Error(err.message)
     }
 }

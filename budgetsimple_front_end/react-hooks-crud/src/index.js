@@ -10,41 +10,36 @@ import AddWallet from './pages/AddWallet';
 
 import Wallet from './pages/Wallet';
 import Transaction from './pages/Transaction';
+import Submission from './pages/Submission';
+import Rate from './pages/Rate';
+import AddSurvey from './pages/AddSurvey.js';
+import AllRatings from './pages/AllRatings';
 import EnterWallet from './pages/EnterWallet';
 import axios from "axios";
-import Navigation from './components/Navigation';
 axios.defaults.withCredentials = true
 
 ReactDOM.render(
   <BrowserRouter>
     <div className="App">
-      <Navigation />
-      <div>
-        <div className="auth-wrapper">
-          <div className="auth-inner fullLength">
-            <div className="col-md-12">
-              <div className="card mdb-color lighten-2 text-center z-depth-2">
-                <div className="card-body">
-                  <Switch>
-                    <Route exact path="/sign-in" component={Login} />
-                    <Route exact path="/sign-up" component={SignUp} />
-                    <Route exact path="/user/account" component={Account} />
-                    <Route exact path="/user/wallets" component={Wallets} />
-                    <Route exact path="/user/addWallet" component={AddWallet} />
-                    <Route exact path="/user/wallets/:id" component={Wallet} />
-                    <Route exact path="/user/wallets/code/:id" component={EnterWallet} />
-                    <Route exact path="/user/wallets/:walletId/transaction/:transactionId" component={Transaction} />
-                    <Route path="*">
-                      <Redirect to="/sign-in" />
-                    </Route>
-                  </Switch>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Switch>
+          
+            <Route exact path="/sign-in" component={Login} />
+            <Route exact path="/sign-up" component={SignUp} />
+            <Route exact path="/user/account" component={Account} />
+            <Route exact path="/user/wallets" component={Wallets} />
+            <Route exact path="/user/addWallet" component={AddWallet} />
+            <Route exact path="/submissions/:id" component={Submission} />
+            <Route exact path="/user/wallets/:id" component={Wallet} />
+            <Route exact path="/user/wallets/code/:id" component={EnterWallet} />
+            <Route exact path="/addSurvey" component={AddSurvey} />
+            <Route exact path="/user/rateUs" component={Rate} />
+            <Route exact path="/allRatings" component={AllRatings} />
+            <Route exact path="/user/wallets/:walletId/transaction/:transactionId" component={Transaction} />
+            <Route path="*">
+              <Redirect to="/sign-in" />
+            </Route>
+          </Switch>
         </div>
-      </div>
-    </div>
   </BrowserRouter>,
   document.getElementById('root')
 );

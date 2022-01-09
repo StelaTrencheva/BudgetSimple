@@ -35,8 +35,7 @@ const AddWallet = () => {
             ]);
         } else {
             try {
-                var dateOfCreation = new Date();
-                await Service.createWallet(user, formValues.budget, formValues.title, formValues.description, formValues.currency, dateOfCreation)
+                await Service.createWallet(user, formValues.budget, formValues.title, formValues.description, formValues.currency)
                 history.push("/user/wallets");
             }
             catch (err) {
@@ -51,71 +50,78 @@ const AddWallet = () => {
         return null;
     }
     return (
-        <div className="row">
-            {error.map(error => (
-                <div className="form-group form-margin">
-                    <div className="alert alert-warning" role="alert">{error}</div>
-                </div>
-            ))}
-            <div className="col-md-12">
-                <div className="card mdb-color lighten-2 text-center z-depth-2">
-                    <div className="card-body">
-                        <Form
-                            onSubmit={saveWalletHandler}
-                        >
-                            {({ handleSubmit }) => (
-                                <form onSubmit={handleSubmit}>
-                                    <div className="form-row">
-                                        <Field name="title">
-                                            {props => (
-                                                <div className="form-group col-md-12">
-                                                    <label htmlFor="title">Title</label>
-                                                    <input {...props.input} type="text" className="form-control" id="title" placeholder="Title" />
+
+        <div>
+            <Navigation />
+            <div className="auth-wrapper">
+                <div className="auth-inner fullLength">
+                    <div className="row">
+                        {error.map(error => (
+                            <div className="form-group form-margin">
+                                <div className="alert alert-warning" role="alert">{error}</div>
+                            </div>
+                        ))}
+                        <div className="col-md-12">
+                            <div className="card mdb-color lighten-2 text-center z-depth-2">
+                                <div className="card-body">
+                                    <Form
+                                        onSubmit={saveWalletHandler}
+                                    >
+                                        {({ handleSubmit }) => (
+                                            <form onSubmit={handleSubmit}>
+                                                <div className="form-row">
+                                                    <Field name="title">
+                                                        {props => (
+                                                            <div className="form-group col-md-12">
+                                                                <label htmlFor="title">Title</label>
+                                                                <input {...props.input} type="text" className="form-control" id="title" placeholder="Title" />
+                                                            </div>
+                                                        )}
+                                                    </Field>
                                                 </div>
-                                            )}
-                                        </Field>
-                                    </div>
-                                    <hr />
-                                    <div className="form-row">
-                                        <Field name="description">
-                                            {props => (
-                                                <div className="form-group col-md-12">
-                                                    <label htmlFor="description">Description</label>
-                                                    <textarea {...props.input} type="text" className="form-control" id="description" placeholder="Description" />
+                                                <hr />
+                                                <div className="form-row">
+                                                    <Field name="description">
+                                                        {props => (
+                                                            <div className="form-group col-md-12">
+                                                                <label htmlFor="description">Description</label>
+                                                                <textarea {...props.input} type="text" className="form-control" id="description" placeholder="Description" />
+                                                            </div>
+                                                        )}
+                                                    </Field>
                                                 </div>
-                                            )}
-                                        </Field>
-                                    </div>
-                                    <hr></hr>
-                                    <div className="row">
-                                        <Field name="budget">
-                                            {props => (
-                                                <div className="form-group col-md-6">
-                                                    <label htmlFor="budget">Budget</label>
-                                                    <input {...props.input} type="budget" className="form-control" id="budget" placeholder="Budget" />
+                                                <hr></hr>
+                                                <div className="row">
+                                                    <Field name="budget">
+                                                        {props => (
+                                                            <div className="form-group col-md-6">
+                                                                <label htmlFor="budget">Budget</label>
+                                                                <input {...props.input} type="budget" className="form-control" id="budget" placeholder="Budget" />
+                                                            </div>
+                                                        )}
+                                                    </Field>
+                                                    <Field name="currency">
+                                                        {props => (
+                                                            <div className="form-group col-md-6">
+                                                                <label htmlFor="Currency">Currency</label>
+                                                                <input {...props.input} type="currency" className="form-control" id="currency" placeholder="Currency" />
+                                                            </div>
+                                                        )}
+                                                    </Field>
                                                 </div>
-                                            )}
-                                        </Field>
-                                        <Field name="currency">
-                                            {props => (
-                                                <div className="form-group col-md-6">
-                                                    <label htmlFor="Currency">Currency</label>
-                                                    <input {...props.input} type="currency" className="form-control" id="currency" placeholder="Currency" />
-                                                </div>
-                                            )}
-                                        </Field>
-                                    </div>
-                                    <hr></hr>
-                                    <button type="submit" className="btn btn-primary">Save wallet</button>
-                                </form>
-                            )}
-                        </Form>
+                                                <hr></hr>
+                                                <button type="submit" className="btn btn-primary">Save wallet</button>
+                                            </form>
+                                        )}
+                                    </Form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
-
-
     );
 }
 

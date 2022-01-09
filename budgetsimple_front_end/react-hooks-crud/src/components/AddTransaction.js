@@ -88,8 +88,7 @@ const AddTransaction = (props) => {
                         if(formValues.category == null){
                             formValues.category = "Groceries"
                         }
-                        var dateOfCreation = new Date();
-                        await Service.createTransaction(wallet.id, user, formValues.amount, formValues.title, formValues.description, formValues.category, dateOfCreation, memberAmounts);
+                        await Service.createTransaction(wallet.id, user, formValues.amount, formValues.title, formValues.description, formValues.category, memberAmounts);
                         history.go(0);
                     }
             }

@@ -12,5 +12,4 @@ public class WalletDTO {
     @Getter @Setter private String title;
     @Getter @Setter private String description;
     @Getter @Setter private String currency;
-    @Getter @Setter private Date dataOfCreation;
 }

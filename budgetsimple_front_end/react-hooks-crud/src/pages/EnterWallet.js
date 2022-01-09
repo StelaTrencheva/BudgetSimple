@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Navigation from "../components/Navigation";
-import { Field, Form } from 'react-final-form'
 import * as Service from "../service/Service"
 import axios from "axios";
 function checkWalletMembers(wallet, user) {
@@ -65,48 +64,55 @@ const EnterWallet = () => {
         }
     }
 
-if (!user) {
-    return null;
-}
-if (wallet) {
-    wallet.members.map(member => {
-        if (member.username === user.username) {
-            history.push('/user/wallets')
-        }
-    })
-}
-if (!wallet) {
-    return null;
-}
-return (
-    <div className="row">
-        {error.map(error => (
-            <div className="form-group form-margin">
-                <div className="alert alert-warning" role="alert">{error}</div>
-            </div>
-        ))}
-        <div className="col-md-12">
-            <div className="card mdb-color lighten-2 text-center z-depth-2">
-                <div className="card-body">
-                    <div className="row wallet-row">
-                        <div className='col-md-6'>
-                            <h6>Title: </h6>
+    if (!user) {
+        return null;
+    }
+    if (wallet) {
+        wallet.members.map(member => {
+            if (member.username === user.username) {
+                history.push('/user/wallets')
+            }
+        })
+    }
+    if (!wallet) {
+        return null;
+    }
+    return (
+
+        <div>
+            <Navigation />
+            <div className="auth-wrapper">
+                <div className="auth-inner fullLength">
+                    <div className="row">
+                        {error.map(error => (
+                            <div className="form-group form-margin">
+                                <div className="alert alert-warning" role="alert">{error}</div>
+                            </div>
+                        ))}
+                        <div className="col-md-12">
+                            <div className="card mdb-color lighten-2 text-center z-depth-2">
+                                <div className="card-body">
+                                    <div className="row wallet-row">
+                                        <div className='col-md-6'>
+                                            <h6>Title: </h6>
+                                        </div>
+                                        <div className='col-md-6'>
+                                            <p>{wallet.title}</p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="row wallet-row">
+                                        <button onClick={askToJoinHandler} className='btn btn-primary'>Ask to join!</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div className='col-md-6'>
-                            <p>{wallet.title}</p>
-                        </div>
-                    </div>
-                    <hr />
-                    <div className="row wallet-row">
-                        <button onClick={askToJoinHandler} className='btn btn-primary'>Ask to join!</button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-
-);
+    );
 }
 
 export default EnterWallet;
