@@ -278,7 +278,7 @@ public class WalletManagerTest {
         userDTO.setId(userId);
         userDTO.setFirstName("Test0");
         userDTO.setLastName("Test0");
-        userDTO.setUsername("Test0");
+        userDTO.setUsername("Test1");
         userDTO.setPassword("Test0");
         userDTO.setDateOfBirth(new Date());
         userDTO.setEmail("Test0@gmail.com");
