@@ -38,7 +38,7 @@ const Submission = (props) => {
         getCurrentSubmission();
     }, [])
 
-    if (!user || !submission) {
+    if (!user || !submission || user.role === "USER") {
         return null;
     }
     return (

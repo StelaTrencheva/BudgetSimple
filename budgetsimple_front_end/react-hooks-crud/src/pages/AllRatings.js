@@ -43,7 +43,7 @@ const AllRatings = () => {
         getAllSubmissions();
     }, [])
 
-    if (!user ) {
+    if (!user || user.role === "USER") {
         return null;
     }
     return (

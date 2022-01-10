@@ -27,7 +27,7 @@ const Rate = () => {
     };
     const getSurveyByTitle = async () => {
         try {
-            const survey = await Service.getSurveyByTitle("two");
+            const survey = await Service.getSurveyByTitle("User Experience");
             console.log(survey);
             setSurvey(survey);
         } catch (err) {
@@ -77,10 +77,8 @@ const Rate = () => {
     }
     const handleRating = (rate) => {
         setRating(rate);
-
     }
-
-    if (!user || !survey) {
+    if (!user || !survey || user.role === "ADMIN") {
         return null;
     }
     return (

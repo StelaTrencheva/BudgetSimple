@@ -20,11 +20,14 @@ public class TransactionMapper {
     public Transaction mapToModel(TransactionDTO transactionDTO) throws IOException {
         List<MemberAmount> memberAmounts = new ArrayList<>();
         double amountPerMember = 0;
+        int noAmountEntered = 0;
         for (MemberAmountDTO memberAmount: transactionDTO.getMemberAmountDTO()) {
             if(memberAmount.getAmount() == 0){
-                amountPerMember = transactionDTO.getAmount() / transactionDTO.getMemberAmountDTO().size();
-                break;
+                noAmountEntered++;
             }
+        }
+        if(noAmountEntered == 4){
+            amountPerMember = transactionDTO.getAmount() / transactionDTO.getMemberAmountDTO().size();
         }
         if(amountPerMember == 0){
             for (MemberAmountDTO memberAmount:transactionDTO.getMemberAmountDTO()

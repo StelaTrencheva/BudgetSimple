@@ -47,7 +47,9 @@ const AddSurvey = () => {
             }
         }
     }
-
+    if(!user || user.role === "USER"){
+        return null;
+    }
     return (
 
         <div>

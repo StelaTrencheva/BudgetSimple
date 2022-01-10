@@ -144,7 +144,8 @@ export const rejectEntryRequest = async (walletId, request) => {
     try {
         const transaction = await axios.post(`${URL}/wallet/${walletId}/rejectWalletEntryRequest`,
             {
-                request
+                "id": request.id,
+                "user": request.user
             }
         );
     }
@@ -344,6 +345,10 @@ export const createSurveySubmission = async (rating, surveyDTO, surveyAnswers) =
 
 export const connectWebsocket = function (subscribtion) {
     const ENDPOINT = `${URL}/websocket`;
+    if (socket != null) {
+        socket.close();
+        socket = null;
+    }
     socket = SockJS(ENDPOINT);
     const stompClient = Stomp.over(socket);
     stompClient.connect({}, () => {

@@ -35,6 +35,7 @@ public class WalletManager {
     private final WalletMapper walletMapper;
     private final TransactionMapper transactionMapper;
 
+
     @Autowired
     public WalletManager(SimpMessagingTemplate messagingTemplate, ImageManager im, IPersistentTransactionData transactionData, IPersistentSharableCodeData generatedCodes, IPersistentWalletData walletData, WalletMapper walletMapper, TransactionMapper transactionMapper) {
         this.transactionData = transactionData;
@@ -46,14 +47,14 @@ public class WalletManager {
         this.messagingTemplate = messagingTemplate;
     }
 
+
     public List<Wallet> getAllWallets(User user) {
         List<Wallet> wallets = walletData.findAllByMembersContains(user);
         return wallets;
     }
 
     public void addWallet(WalletDTO walletDTO) {
-        Wallet wallet = walletMapper.mapToModel(walletDTO);
-        walletData.save(wallet);
+        walletData.save(walletMapper.mapToModel(walletDTO));
     }
 
     public void deleteWallet(String walletId) throws IOException {
@@ -82,6 +83,9 @@ public class WalletManager {
 
     public List<Transaction> getAllTransactions(String id) {
         Wallet wallet = walletData.findById(id).orElse(null);
+        if(wallet == null){
+            return null;
+        }
         return wallet.getTransactions();
     }
 
@@ -91,7 +95,7 @@ public class WalletManager {
     }
 
     public void addTransaction(String id, TransactionDTO transactionDTO) throws IOException {
-        Wallet wallet = walletData.findById(id).orElse(null);
+        Wallet wallet = getWalletById(id);
         Transaction newTransaction = transactionMapper.mapToModel(transactionDTO);
         if (transactionDTO.getImage() != null) {
             newTransaction.setImage(im.createImage(transactionDTO.getImage()));
@@ -107,21 +111,21 @@ public class WalletManager {
 
     public void addNewMemberRequest(UserDTO user, String walletId) {
         Wallet wallet = getWalletById(walletId);
-        WalletEntryRequest walletEntryRequest = new WalletEntryRequest(new UserMapper(new BCryptPasswordEncoder()).mapToModel(user));
-        wallet.addEntryRequest(walletEntryRequest);
+        wallet.addEntryRequest(new WalletEntryRequest(new UserMapper(new BCryptPasswordEncoder()).mapToModel(user)));
         walletData.save(wallet);
     }
 
     public void acceptWalletEntryRequest(String walletId, WalletEntryRequest request) {
         Wallet wallet = getWalletById(walletId);
-        for (User user : wallet.getMembers()) {
-            this.notifyWalletMembersOfNewMember(user.getUsername(), new WebsocketMessage(String.format("New member with name: " + request.getUser().getFirstName() + " " +
-                    request.getUser().getLastName() + " was added to the wallet " + wallet.getTitle())));
-        }
-
         wallet.addMember(request.getUser());
         wallet.removeEntryRequest(request);
         walletData.save(wallet);
+        for (User user : wallet.getMembers()) {
+            if (!user.getUsername().equals(request.getUser().getUsername())) {
+                this.notifyWalletMembersOfNewMember(user.getUsername(), new WebsocketMessage(String.format("New member with name: " + request.getUser().getFirstName() + " " +
+                        request.getUser().getLastName() + " was added to the wallet " + wallet.getTitle())));
+            }
+        }
     }
 
     public void rejectWalletEntryRequest(String walletId, WalletEntryRequest request) {
@@ -153,40 +157,40 @@ public class WalletManager {
     public Map<String, Double> getWalletSpendingPerMember(String id) {
         Wallet wallet = this.getWalletById(id);
         Map<String, Double> userWithSpentAmount = new HashMap<>();
-        for (User member : wallet.getMembers()){
+        for (User member : wallet.getMembers()) {
             double spentAmount = 0;
-            for (Transaction transaction : wallet.getTransactions()){
-                for (MemberAmount ma : transaction.getMemberAmounts()){
-                    if(member.equals(ma.getMember())){
+            for (Transaction transaction : wallet.getTransactions()) {
+                for (MemberAmount ma : transaction.getMemberAmounts()) {
+                    if (member.equals(ma.getMember())) {
                         spentAmount += ma.getAmount();
                     }
                 }
             }
-            userWithSpentAmount.put(member.getFirstName() +" "+ member.getLastName(), spentAmount);
+            userWithSpentAmount.put(member.getFirstName() + " " + member.getLastName(), spentAmount);
         }
-        return  userWithSpentAmount;
+        return userWithSpentAmount;
     }
 
     public Map<TransactionCategory, Double> getWalletSpendingPerCategory(String id) {
         Wallet wallet = this.getWalletById(id);
-        Map<TransactionCategory, Double> userWithSpentAmount = new HashMap<>();
+        Map<TransactionCategory, Double> categoryWithSpentAmount = new HashMap<>();
 
-            for (Transaction transaction : wallet.getTransactions()){
-                double spentAmount = 0;
-                for (TransactionCategory tc : TransactionCategory.values()){
-                    if(transaction.getCategory() == tc){
-                        spentAmount += transaction.getAmount();
-                    }
+        for (Transaction transaction : wallet.getTransactions()) {
+            double spentAmount = 0;
+            for (TransactionCategory tc : TransactionCategory.values()) {
+                if (transaction.getCategory() == tc) {
+                    spentAmount += transaction.getAmount();
                 }
-                userWithSpentAmount.put(transaction.getCategory(), spentAmount);
             }
-        return  userWithSpentAmount;
+            categoryWithSpentAmount.put(transaction.getCategory(), spentAmount);
+        }
+        return categoryWithSpentAmount;
     }
 
     public Double getWalletTotalSpend(String id) {
         Wallet wallet = this.getWalletById(id);
         double totalSpent = 0;
-        for (Transaction transaction : wallet.getTransactions()){
+        for (Transaction transaction : wallet.getTransactions()) {
             totalSpent += transaction.getAmount();
         }
         return totalSpent;
@@ -195,8 +199,8 @@ public class WalletManager {
     public Double getAllWalletsSpending(User user) {
         List<Wallet> wallets = walletData.findAllByMembersContains(user);
         double totalSpent = 0;
-        for (Wallet wallet : wallets){
-            for(Transaction transaction : wallet.getTransactions()){
+        for (Wallet wallet : wallets) {
+            for (Transaction transaction : wallet.getTransactions()) {
                 totalSpent += transaction.getAmount();
             }
         }

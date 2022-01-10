@@ -15,8 +15,13 @@ public class FileSystemImageData implements IImageData {
     @Override
     public void SaveImage(MultipartFile uploadedImage, String filename) throws IOException {
         if (!uploadedImage.isEmpty() && isRepositoryExists()) {
-            OutputStream outputStream = new FileOutputStream(uploadLocation + filename);
-            outputStream.write(uploadedImage.getBytes());
+            try(
+                    OutputStream outputStream = new FileOutputStream(uploadLocation + filename);
+                    ) {
+                outputStream.write(uploadedImage.getBytes());
+            }
+            catch(IOException e){
+            }
         }
     }
     public boolean isRepositoryExists() {

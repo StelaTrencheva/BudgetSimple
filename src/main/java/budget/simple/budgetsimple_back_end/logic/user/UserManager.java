@@ -61,7 +61,11 @@ public class UserManager {
     }
 
     public User getUser(String username){
-        return usersData.getUser(username);
+        User user = usersData.getUser(username);
+        if (user == null){
+            throw new NotExistingUserException();
+        }
+        return user;
     }
 
     public User getLoggedInUser(){

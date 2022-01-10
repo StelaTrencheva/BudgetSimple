@@ -98,6 +98,7 @@ const WalletInfo = (props) => {
     async function rejectEntryRequest(request) {
         try {
             await Service.rejectEntryRequest(wallet.id, request)
+            history.go(0);
         }
         catch (err) {
             setError(oldArray => [...oldArray,
@@ -108,6 +109,7 @@ const WalletInfo = (props) => {
     async function acceptEntryRequest(request) {
         try {
             await Service.acceptEntryRequest(wallet.id, request)
+            history.go(0);
         }
         catch (err) {
             setError(oldArray => [...oldArray,
@@ -276,7 +278,7 @@ const WalletInfo = (props) => {
                                                                 </button>
                                                             </div>
                                                             <div className='col-md-4'>
-                                                                <button onClick={rejectEntryRequest} className="btn btn-danger">
+                                                                <button onClick={() => rejectEntryRequest(request)} className="btn btn-danger">
                                                                     Reject
                                                                 </button>
                                                             </div>

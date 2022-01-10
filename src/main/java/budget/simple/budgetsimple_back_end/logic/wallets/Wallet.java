@@ -1,5 +1,6 @@
 package budget.simple.budgetsimple_back_end.logic.wallets;
 
+import budget.simple.budgetsimple_back_end.exception.ExistingUserException;
 import budget.simple.budgetsimple_back_end.logic.user.User;
 import budget.simple.budgetsimple_back_end.model.userDTOs.UserDTO;
 import com.google.zxing.WriterException;
@@ -79,7 +80,7 @@ public class Wallet{
     @OneToMany(cascade = CascadeType.ALL)
     @Getter @Setter private List<Transaction> transactions;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     @Getter @Setter private List<WalletEntryRequest> walletEntryRequests;
 
     public Wallet(User creator, Double budget, String title, String description, String currency, Date dataOfCreation){
@@ -99,11 +100,10 @@ public class Wallet{
             code.generateQRCodeImage(200, 200);
             this.generatedCode = code;
         }catch(WriterException | IOException e){
-            e.printStackTrace();
         }
     }
 
-    protected Wallet(){
+    public Wallet(){
 
     }
 
@@ -124,9 +124,27 @@ public class Wallet{
         this.transactions.add(transaction);
     }
     public void addEntryRequest(WalletEntryRequest walletEntryRequest){
+        for (WalletEntryRequest request: this.walletEntryRequests
+             ) {
+            if(request.getUser().getUsername().equals(walletEntryRequest.getUser().getUsername())){
+                throw new IllegalArgumentException("This user already requested to join the wallet!");
+            }}
+
+        for (User user: this.members
+             ) {
+            if(user.getUsername().equals(walletEntryRequest.getUser().getUsername())){
+                throw new IllegalArgumentException("This user is already in the wallet!");
+            }
+        }
         this.walletEntryRequests.add(walletEntryRequest);
     }
     public void addMember(User user){
+        for (User member:this.members
+             ) {
+            if(member.getUsername().equals(user.getUsername())){
+                throw new IllegalArgumentException("This user already exist in the wallet");
+            }
+        }
         this.members.add(user);
     }
     public void removeEntryRequest(WalletEntryRequest request){

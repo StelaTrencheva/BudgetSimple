@@ -262,4 +262,17 @@ public class UserManagerTest {
         Assertions.assertEquals("This user does not exist in the system!", thrown.getMessage());
         verify(usersData, times(1)).getUserByUsernameAndPassword("Test0","Test0");
     }
+    @Test()
+    public void getUserByUsernameTestException() {
+        // arrange
+        String username = "test";
+        IUsersData usersData = mock(IUsersData.class);
+        UserManager userManager = new UserManager(usersData, new UserMapper(new BCryptPasswordEncoder()));
+
+        NotExistingUserException thrown = Assertions.assertThrows(NotExistingUserException.class, () -> {
+            userManager.getUser(username);
+        });
+        Assertions.assertEquals("This user does not exist in the system!", thrown.getMessage());
+        verify(usersData, times(1)).getUser(username);
+    }
 }

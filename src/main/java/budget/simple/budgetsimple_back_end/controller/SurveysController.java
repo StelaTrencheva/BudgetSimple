@@ -12,11 +12,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/survey")
 public class SurveysController {
-    @Autowired
     private SurveyManager sm;
-    @Autowired
-    SurveySubmissionManager ssm;
+    private SurveySubmissionManager ssm;
 
+    @Autowired
+    public SurveysController(SurveyManager sm, SurveySubmissionManager ssm){
+        this.sm = sm;
+        this.ssm = ssm;
+    }
     // Get all submissions
     @GetMapping("/submission/getAll")
     @ResponseStatus(HttpStatus.ACCEPTED)

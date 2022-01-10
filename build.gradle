@@ -64,7 +64,18 @@ sonarqube {
         property "sonar.login", "e28b43431bd3a3aebcebd91079e515373220cc90"
     }
 }
-//bootBuildImage {
- //   builder = 'paketobuildpacks/builder:tiny'
-  //  environment = ['BP_NATIVE_IMAGE': 'true']
-//}
+configurations.create('coverageDataElements') {
+    visible = false
+    canBeResolved = false
+    canBeConsumed = true
+    extendsFrom(configurations.implementation)
+    attributes {
+        attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+        attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, Category.DOCUMENTATION))
+        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named(DocsType, 'jacoco-coverage-data'))
+    }
+    // This will cause the test task to run if the coverage data is requested by the aggregation task
+    outgoing.artifact(tasks.named("test").map { task ->
+        task.extensions.getByType(JacocoTaskExtension).destinationFile
+    })
+}
