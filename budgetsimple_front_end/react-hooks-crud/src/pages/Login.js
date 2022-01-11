@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import logo from "../images/logo.png"
 import { Link, useHistory } from "react-router-dom";
 import * as Service from '../service/Service'
+import axios from "axios";
 
 
 const Login = () => {
@@ -9,6 +10,16 @@ const Login = () => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [error, setError] = useState([]);
+    const [user, setUser] = useState();
+
+    const getLoggedInUser = async () => {
+        const user = await axios.get("http://localhost:8080/user/me");
+        console.log(user);
+        if(user.data != ''){
+            Service.logoutUser();
+            Service.disconnectWebsocket();
+        }
+    };
     const logInUser = async () => {
         try {
             await Service.logInUser(username, password);
@@ -28,8 +39,7 @@ const Login = () => {
     }
 
     useEffect(() => {
-        Service.logoutUser();
-        Service.disconnectWebsocket();
+        getLoggedInUser();
         if (localStorage.getItem("redirect_path") != null) {
             setError(currentErrors => [...currentErrors, "You need to login in order to enter a wallet!"]);
         }

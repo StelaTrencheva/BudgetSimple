@@ -21,7 +21,7 @@ export const logInUser = async (username, password) => {
 }
 
 export const logoutUser = async () => {
-    await axios.post(`${URL}/user/logout`);
+    await axios.post(`${URL}/logout`);
 
 }
 

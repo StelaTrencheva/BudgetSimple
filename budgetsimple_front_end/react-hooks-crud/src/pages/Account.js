@@ -117,10 +117,6 @@ const Account = () => {
                                             {editable ? 'Save info' : 'Edit info'}
                                         </button>
                                     </div>
-                                    <hr></hr>
-                                    <div className="row">
-                                        <Link to={"/"} className="btn btn-primary">Change password</Link>
-                                    </div>
                                 </div>
                             </div>
                         </div>

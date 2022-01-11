@@ -35,7 +35,7 @@ public class Survey {
     @Column(
             name = "title",
             updatable = false,
-            columnDefinition = "text"
+            columnDefinition = "varchar(255)"
     )
     @Getter
     @Setter

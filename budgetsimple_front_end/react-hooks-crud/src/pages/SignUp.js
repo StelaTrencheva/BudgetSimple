@@ -17,18 +17,10 @@ const SignUp = () => {
 
     const [error, setError] = useState([]);
 
-    const logInUser = async () => {
-        try {
-            await Service.logInUser(username, password);
-            Service.connectWebsocket(`/walletEntry/messages/${username}`);
-        } catch (err) {
-            setError(currentErrors => [...currentErrors, err]);
-        }
-    }
     const createUser = async () => {
         try {
             await Service.createUser(firstName, lastName, email, address, phoneNum, dateOfBirth, username, "USER", password)
-            logInUser();
+            history.push("/sign-in")
         }
         catch (err) {
             setError(oldArray => [...oldArray,
@@ -58,7 +50,7 @@ const SignUp = () => {
                     <img className="logo" src={logo} alt="logo" />
                     {error.map(error => (
                         <div className="form-group form-margin">
-                            <div className="alert alert-warning" role="alert">{error}</div>
+                            <div className="alert alert-warning" id="error" role="alert">{error}</div>
                         </div>
                     ))}
                     <button className="btn btn-google"><a href="#"><img src="https://img.icons8.com/color/16/000000/google-logo.png" /> Sign up with Google</a> </button>

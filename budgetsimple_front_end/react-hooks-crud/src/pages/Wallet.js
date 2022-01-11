@@ -71,19 +71,19 @@ const Wallet = (props) => {
                         <div className="row wallet-row">
 
                             <div className="col-lg-4">
-                                <button onClick={() => { chosenOptionHandler("transactions") }} className="btn btn-primary">
+                                <button onClick={() => { chosenOptionHandler("transactions") }} className="btn btn-primary" id="transactions">
                                     Transactions
                                 </button>
                             </div>
 
                             <div className="col-lg-4">
-                                <button onClick={() => { chosenOptionHandler("walletInfo") }} className="btn btn-primary">
+                                <button onClick={() => { chosenOptionHandler("walletInfo") }} className="btn btn-primary" id="walletInfo">
                                     Wallet Info
                                 </button>
                             </div>
 
                             <div className="col-lg-4">
-                                <button onClick={() => { chosenOptionHandler("statistics") }} className="btn btn-primary">
+                                <button onClick={() => { chosenOptionHandler("statistics") }} className="btn btn-primary" id="Statistics">
                                     Statistics
                                 </button>
                             </div>

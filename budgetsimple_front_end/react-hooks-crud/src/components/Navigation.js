@@ -40,7 +40,7 @@ const Navigation = () => {
                                         <NavLink to={`/allRatings`}>All ratings</NavLink>
                                     )
                         }
-                        <NavLink to="/" onClick={Service.logoutUser}>Logout</NavLink>
+                        <NavLink to="/sign-in">Logout</NavLink>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
