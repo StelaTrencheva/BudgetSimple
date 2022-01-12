@@ -19,17 +19,17 @@ test-job:       # This job runs in the build stage, which runs first.
 
 sonarqube-check:
   stage: sonarqube
-  image: gradle:jre11-slim
-  variables: 
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
-    GIT_DEPTH: "0"
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths: 
-      - .sonar/cache  
-  script: gradle sonarqube
-  allow_failure: true
-  only:
+  image: gradle:alpine
+  variables:
+    SONAR_TOKEN: "e28b43431bd3a3aebcebd91079e515373220cc90"
+    SONAR_HOST_URL: "http://localhost:9000"
+    GIT_DEPTH: 0
+  sonarqube-check:
+    stage: sonarqube
+    script: ./gradlew sonarqube -Dsonar.qualitygate.wait=true
+    allow_failure: true
+    only:
+      - merge_requests
       - master
 
 cypress_tests:  
