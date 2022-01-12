@@ -1,0 +1,33 @@
+version: '3'
+services:
+  docker-mysql:
+    image: mysql
+    container_name: BudgetSimpleMySql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=BudgetSimple
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"
+    security_opt:
+      - seccomp:unconfined
+
+  app:
+    image: budgetsimplebackend
+    container_name: BudgetSimpleBackend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://docker-mysql:3306/BudgetSimple
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "password"
+    build:
+      dockerfile: "Dockerfile"
+    depends_on:
+      - docker-mysql
+
+  frontend:
+    image: budgetsimplefrontend
+    container_name: BudgetSimpleFrontend
+    ports:
+      - "3000:3000"
