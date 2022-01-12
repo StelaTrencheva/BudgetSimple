@@ -28,18 +28,8 @@ cypress_tests:
   stage: cypress
   image: cypress/base:10
   script:
-    - docker start BudgetSimpleMySql
-    - docker start BudgetSimpleBackend
-    - net stop winnat
-    - docker start BudgetSimpleFrontend
-    - net start winnat
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
-    - cd ..
-    - cd ..
-    - docker stop BudgetSimpleBackend
-    - docker stop BudgetSimpleMySql
-    - docker stop BudgetSimpleFrontend
 
 
 docker:
