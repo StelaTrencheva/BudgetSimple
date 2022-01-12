@@ -28,8 +28,10 @@ cypress_tests:
   stage: cypress
   image: cypress/base:10
   script:
+    - docker compose up
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
+    - docker compose down
 
 
 docker:
