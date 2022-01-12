@@ -28,17 +28,20 @@ cypress_tests:
   stage: cypress
   image: cypress/base:10
   script:
-    - docker compose up
+    - docker container run --name BudgetSimpleMySql mysql
+    - docker container run --name BudgetSimpleBackend budgetsimplebackend
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
     - cd ..
     - cd ..
-    - docker compose down
+    - docker stop BudgetSimpleBackend
+    - docker stop BudgetSimpleMySql
 
 
 docker:
   stage: docker
   script:
+    - cd budgetsimple_front_end/react-hooks-crud
     - docker build -t budgetsimplefrontend .
     - cd ..
     - cd ..
