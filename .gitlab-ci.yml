@@ -33,7 +33,9 @@ cypress_tests:
   script:
     - docker start BudgetSimpleMySql
     - docker start BudgetSimpleBackend
+    - net stop winnat
     - docker start BudgetSimpleFrontend
+    - net start winnat
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
     - cd ..
