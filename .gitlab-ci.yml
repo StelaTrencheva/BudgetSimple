@@ -18,13 +18,6 @@ test-job:       # This job runs in the build stage, which runs first.
     - ./gradlew.bat --stop
 
 sonarqube-check:
-  stage: sonarqube
-  image: gradle:alpine
-  variables:
-    SONAR_TOKEN: "e28b43431bd3a3aebcebd91079e515373220cc90"
-    SONAR_HOST_URL: "http://localhost:9000"
-    GIT_DEPTH: 0
-  sonarqube-check:
     stage: sonarqube
     script: ./gradlew sonarqube -Dsonar.qualitygate.wait=true
     allow_failure: true
