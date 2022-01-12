@@ -25,5 +25,5 @@ cypress_tests:
   stage: cypress
   image: cypress/base:10
   script:    
-    - cd budgetsimple_front_end   
+    - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
