@@ -1,7 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
-  - sonarqube
+  - sonar
   - cypress
   - docker
 
@@ -18,7 +18,7 @@ test-job:       # This job runs in the build stage, which runs first.
     - ./gradlew.bat --stop
 
 sonarqube-check:
-    stage: sonarqube
+    stage: sonar
     script: ./gradlew sonarqube -Dsonar.qualitygate.wait=true
     allow_failure: true
     only:
