@@ -32,7 +32,7 @@ cypress_tests:
 docker:
   stage: docker
   script:
-    - cd budgetsimple_front_end
+    - cd budgetsimple_front_end/react-hooks-crud
     - docker build -t budgetsimplefrontend .
     - cd ..
     - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\prod\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
