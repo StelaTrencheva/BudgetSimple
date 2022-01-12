@@ -34,4 +34,14 @@ cypress_tests:
 docker:
   stage: docker
   script:
-    - docker compose up
+    - docker build -t budgetsimplefrontend .
+    - cd ..
+    - cd ..
+    - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\prod\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
+    - replace "override/prod/application.properties" "src/main/resources"
+    - ./gradlew build -x test
+    - docker build -t budgetsimplebackend .
+    - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\test\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
+    - replace "override/test/application.properties" "src/main/resources"
+    - ./gradlew.bat --stop
+
