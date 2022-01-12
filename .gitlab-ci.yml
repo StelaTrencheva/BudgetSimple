@@ -1,7 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
-  - sonarqube-check
+  - sonarqube
   - cypress
   - docker
 
