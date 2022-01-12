@@ -30,12 +30,14 @@ cypress_tests:
   script:
     - docker start BudgetSimpleMySql
     - docker start BudgetSimpleBackend
+    - docker start BudgetSimpleFrontend
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
     - cd ..
     - cd ..
     - docker stop BudgetSimpleBackend
     - docker stop BudgetSimpleMySql
+    - docker stop BudgetSimpleFrontend
 
 
 docker:
