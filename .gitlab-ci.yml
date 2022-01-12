@@ -27,9 +27,6 @@ sonarqube-check:
 cypress_tests:  
   stage: cypress
   image: cypress/base:10
-  services:
-    ports:
-      - "3001:3001"
   script:
     - docker start BudgetSimpleMySql
     - docker start BudgetSimpleBackend
