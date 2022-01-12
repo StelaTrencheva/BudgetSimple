@@ -34,12 +34,4 @@ cypress_tests:
 docker:
   stage: docker
   script:
-    - cd budgetsimple_front_end/react-hooks-crud
-    - docker build -t budgetsimplefrontend .
-    - cd ..
-    - cd ..
-    - replace "override/prod/application.properties" "src/main/resources"
-    - ./gradlew build -x test
-    - docker build -t budgetsimplebackend .
-    - replace "override/test/application.properties" "src/main/resources"
-    - ./gradlew.bat --stop
+    - docker compose up
