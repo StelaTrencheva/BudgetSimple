@@ -2,6 +2,7 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - cypress
+  - docker
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -27,3 +28,15 @@ cypress_tests:
   script:    
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
+
+docker:
+  stage: docker
+  script:
+    - cd budgetsimple_front_end
+    - docker build -t budgetsimplefrontend .
+    - cd ..
+    - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\prod\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
+    - ./gradlew build -x test
+    - docker build -t budgetsimplebackend .
+    - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\test\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
+    - ./gradlew.bat --stop
