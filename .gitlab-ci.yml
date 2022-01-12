@@ -1,6 +1,7 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
+  - cypress
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -19,3 +20,10 @@ sonarqube-check:
   script:
     - ./gradlew sonarqube
     - ./gradlew.bat --stop
+
+cypress_tests:  
+  stage: cypress
+  image: cypress/base:10
+  script:    
+    - cd budgetsimple_front_end   
+    - npx cypress run
