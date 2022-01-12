@@ -35,6 +35,7 @@ docker:
     - cd budgetsimple_front_end/react-hooks-crud
     - docker build -t budgetsimplefrontend .
     - cd ..
+    - cd ..
     - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\prod\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
     - ./gradlew build -x test
     - docker build -t budgetsimplebackend .
