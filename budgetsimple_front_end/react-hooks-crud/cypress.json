@@ -1,3 +1,15 @@
 {
-    "experimentalStudio": true
+    "experimentalStudio": true,
+    "testFiles": [
+        "signUpWrongCredentials.js",
+        "signInWrongCredentials.js",
+        "signInAsUser.js",
+        "signInAsAdmin.js",
+        "createNewWallet.js",
+        "createWalletNotFilledFields.js",
+        "addTransactionToWallet.js",
+        "addTransactionToWalletNotFilledFields.js",
+        "chnageWalletBudget.js",
+        "editUserInfo.js"
+      ]
 }

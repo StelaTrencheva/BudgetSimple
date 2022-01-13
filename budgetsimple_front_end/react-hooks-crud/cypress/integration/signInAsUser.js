@@ -1,5 +1,5 @@
 
-describe('Login Test', () => {
+describe('Login Test User', () => {
     it('Enters login credentials of the user', () => {
         cy.visit('http://localhost:3000/sign-in');
         cy.get(':nth-child(2) > .form-control').clear();
