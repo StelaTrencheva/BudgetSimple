@@ -27,15 +27,9 @@ sonarqube-check:
 cypress_tests:  
   stage: cypress
   image: cypress/base:10
-  before_script:
-    - docker compose up --detach
   script:
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
-  after_script:
-    - docker kill BudgetSimpleFrontend
-    - docker kill BudgetSimpleMySql
-    - docker kill BudgetSimpleBackend
 
 
 docker:
