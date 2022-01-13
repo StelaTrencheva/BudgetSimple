@@ -20,24 +20,24 @@ test-job:       # This job runs in the build stage, which runs first.
 
 sonarqube-check:
   stage: sonarqube
+  script:
+    - ./gradlew sonarqube
+    - ./gradlew.bat --stop
+
+cypress_tests:  
+  stage: cypress
+  image: cypress/base:10
   before_script:
     - docker start BudgetSimpleMySql
     - docker start BudgetSimpleFrontend
     - docker start BudgetSimpleBackend
   script:
-    - ./gradlew sonarqube
-    - ./gradlew.bat --stop
+    - cd budgetsimple_front_end/react-hooks-crud
+    - npx cypress run
   after_script:
     - docker stop BudgetSimpleMySql
     - docker stop BudgetSimpleFrontend
     - docker stop BudgetSimpleBackend
-
-cypress_tests:  
-  stage: cypress
-  image: cypress/base:10
-  script:
-    - cd budgetsimple_front_end/react-hooks-crud
-    - npx cypress run
 
 
 docker:
