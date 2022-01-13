@@ -27,9 +27,13 @@ sonarqube-check:
 cypress_tests:  
   stage: cypress
   image: cypress/base:10
+  before_script:
+    - docker-compose up --detach
   script:
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
+  after-script:
+    - docker-compose down || true
 
 
 docker:
@@ -40,10 +44,8 @@ docker:
     - cd ..
     - cd ..
     - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\prod\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
-    - replace "override/prod/application.properties" "src/main/resources"
     - ./gradlew build -x test
     - docker build -t budgetsimplebackend .
     - replace "F:\stela\fontys\individual\budgetsimple_individual_project\override\test\application.properties" "F:\stela\fontys\individual\budgetsimple_individual_project\src\main\resources"
-    - replace "override/test/application.properties" "src/main/resources"
     - ./gradlew.bat --stop
 
