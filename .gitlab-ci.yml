@@ -11,8 +11,6 @@ cypress_tests:
   script:
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
-  after_script:
-    - docker-compose down
 
 
 docker:
