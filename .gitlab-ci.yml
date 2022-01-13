@@ -20,9 +20,17 @@ test-job:       # This job runs in the build stage, which runs first.
 
 sonarqube-check:
   stage: sonarqube
+  before_script:
+    - docker start BudgetSimpleMySql
+    - docker start BudgetSimpleFrontend
+    - docker start BudgetSimpleBackend
   script:
     - ./gradlew sonarqube
     - ./gradlew.bat --stop
+  after_script:
+    - docker stop BudgetSimpleMySql
+    - docker stop BudgetSimpleFrontend
+    - docker stop BudgetSimpleBackend
 
 cypress_tests:  
   stage: cypress
