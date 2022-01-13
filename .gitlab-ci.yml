@@ -1,7 +1,4 @@
 stages:          # List of stages for jobs, and their order of execution
-  - build
-  - test
-  - sonarqube
   - cypress
   - docker
 
@@ -32,7 +29,8 @@ cypress_tests:
   script:
     - cd budgetsimple_front_end/react-hooks-crud
     - npx cypress run
-    - docker-compose down || true
+  after-script:
+    - docker-compose down
 
 
 docker:
