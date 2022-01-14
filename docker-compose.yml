@@ -25,6 +25,7 @@ services:
       dockerfile: "Dockerfile"
     depends_on:
       - docker-mysql
+    restart: on-failure:10
 
   frontend:
     image: budgetsimplefrontend
