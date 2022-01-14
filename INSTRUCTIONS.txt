@@ -1,0 +1,14 @@
+The folder of the project consists of three main parts:
+- Backend which is in the root folder. There is also the docker compose file for the creation of the docker containers.
+- Frontend which is in the folder "budgetsimple_front_end" and the main files are in "react-hooks-crud". There is also a Dockerfile for th e creation of the frontend docker image.
+- All the documentation from sprint 1-6 is in folder "documentation". The main files are in the folder itself and other files like videos of the finished user stories are in the folders of the different sprints.
+
+In order to start the project open cmd in root folder and execute these commands one by one:
+cd .\budgetsimple_front_end\react-hooks-crud\
+docker build -t budgetsimplefrontend
+cd ..
+cd ..
+docker pull mysql:latest
+docker compose up
+
+*Keep in mind that the database is empty and you need to create a new user in order to see the other functionalities
