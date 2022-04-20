@@ -1,5 +1,5 @@
 # BudgetSimple - Spring Boot and React JS Web Application 
-Semester 4 Individual Project
+Semester 3 Individual Project
 ## 1. Project idea:
  BudgetSimple is a budget application meant to be a convenient way of tracking spending and that simplifies
 people’s needs while collecting everything in one place. The application can be used individually and in a
